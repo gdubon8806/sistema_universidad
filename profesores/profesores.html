@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Profesores</title>
+  <link rel="stylesheet" href="profesores.css">
+</head>
+<body>
+  <h1>Gestión de Profesores</h1>
+
+  <form id="form-profesor">
+    <input type="text" id="nombre" placeholder="Nombre" required>
+    <input type="text" id="especialidad" placeholder="Especialidad" required>
+    <input type="text" id="disponibilidad" placeholder="Disponibilidad" required>
+    <button type="submit">Guardar</button>
+  </form>
+
+  <input type="text" id="filtro" placeholder="Filtrar por especialidad">
+
+  <table id="tabla-profesores">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Especialidad</th>
+        <th>Disponibilidad</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Aquí se agregan los profesores automáticamente -->
+    </tbody>
+  </table>
+
+  <script src="profesores.js"></script>
+</body>
+</html>
