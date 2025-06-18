@@ -1,34 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../../styles/global.css">
-    <!-- <link rel="stylesheet" href="../../styles/index.css"> -->
+    <link rel="stylesheet" href="../../styles/matriculas.css">
 </head>
+
 <body>
-    <div class="encabezado-contenedor">
+    <div class="navBar-contenedor">
         <h1>Panel Administrativo Universitario</h1>
         <div class="menu-container">
-          <a class="btn-primario" href="../">Inicio</a>
+            <a class="btn-primario" href="../">Inicio</a>
             <a class="btn-primario" href="#">Matrículas</a>
             <a class="btn-primario" href="../Estudiantes/">Estudiantes</a>
-            <a class="btn-primario" href="../Profesores/">Profesores</a> 
+            <a class="btn-primario" href="../Profesores/">Profesores</a>
             <a class="btn-primario" href="#">Carreras</a>
             <a class="btn-primario" href="#">Cursos</a>
             <a class="btn-primario" href="#">Secciones</a>
         </div>
     </div>
-    
-    <div class="matriculas-encabezado">
-        <h1>Matrículas</h1>
+
+    <div class="encabezado-contenedor">
+        <h2>Matrículas</h2>
         <button class="btn-primario" id="abrir-modal">Nueva matrícula</button>
     </div>
 
-    <div id="matriculas-contenedor"></div>
-    <!-- Plantilla para tarjetas de reservas -->
+    <h3 class="table-title">Matrículas realizadas</h3>
+    <table class="matriculas-table">
+        <thead>
+            <tr>
+                <th>ID Matrícula</th>
+                <th>Estudiante</th>
+                <th>Carrera</th>
+                <th>Materia</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1001</td>
+                <td>Ana Pérez</td>
+                <td>Ingeniería Informática</td>
+                <td>Programación I</td>
+                <td>2025-06-10</td>
+                <td>Activa</td>
+                <td>
+                    <button class="btn-edit">Editar</button>
+                    <button class="btn-delete">Eliminar</button>
+                </td>
+            </tr>
+            <tr>
+                <td>1002</td>
+                <td>Carlos Gómez</td>
+                <td>Administración</td>
+                <td>Contabilidad</td>
+                <td>2025-06-11</td>
+                <td>Activa</td>
+                <td>
+                    <button class="btn-edit">Editar</button>
+                    <button class="btn-delete">Eliminar</button>
+                </td>
+            </tr>
+            <tr>
+                <td>1003</td>
+                <td>Lucía Torres</td>
+                <td>Derecho</td>
+                <td>Derecho Civil</td>
+                <td>2025-06-12</td>
+                <td>Pendiente</td>
+                <td>
+                    <button class="btn-edit">Editar</button>
+                    <button class="btn-delete">Eliminar</button>
+                </td>
+            </tr>
+            <tr>
+                <td>1004</td>
+                <td>Juan Ruiz</td>
+                <td>Medicina</td>
+                <td>Anatomía</td>
+                <td>2025-06-13</td>
+                <td>Activa</td>
+                <td>
+                    <button class="btn-edit">Editar</button>
+                    <button class="btn-delete">Eliminar</button>
+                </td>
+            </tr>
+            <tr>
+                <td>1005</td>
+                <td>María López</td>
+                <td>Psicología</td>
+                <td>Psicología General</td>
+                <td>2025-06-14</td>
+                <td>Cancelada</td>
+                <td>
+                    <button class="btn-edit">Editar</button>
+                    <button class="btn-delete">Eliminar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     
+    <div id="matriculas-contenedor"></div>
+    <!-- Plantilla para tarjetas de reservas  -->
+
     <template id="reserva-plantilla">
         <div class="tarjeta">
             <div class="tarjeta-img">
@@ -59,35 +138,35 @@
                     <option value="" disabled selected>Seleccione un alumno</option>
                     <!-- Las opciones se llenarán dinámicamente desde la base de datos -->
                 </select>
-                
+
                 <label for="fecha-inicio">Fecha de Inicio:</label>
                 <input type="date" id="fecha-inicio" name="fecha-inicio" required>
-                
+
                 <label for="fecha-salida">Fecha de Salida:</label>
                 <input type="date" id="fecha-salida" name="fecha-salida" required>
-                
+
                 <label for="habitacion">Número de Habitación:</label>
                 <select id="habitacion" name="habitacion" required>
                     <option value="" disabled selected>Seleccione una habitación</option>
                     <!-- Las opciones se llenarán dinámicamente desde la base de datos -->
                 </select>
-                
+
                 <label for="numero-adultos">Número de Adultos:</label>
                 <input type="number" id="numero-adultos" name="numero_adultos" min="1" required>
 
                 <label for="numero-ninos">Número de Niños:</label>
                 <input type="number" id="numero-ninos" name="numero_ninos" min="0" required>
-                                
+
                 <label for="precio">Precio Total:</label>
                 <input type="number" id="precio" name="precio" readonly>
-                
+
                 <label for="estado">Estado:</label>
                 <select id="estado" name="estado" required>
                     <option value="confirmada">Confirmada</option>
                     <option value="pendiente">Pendiente</option>
                     <option value="cancelada">Cancelada</option>
                 </select>
-                
+
                 <button type="submit">Aceptar</button>
             </form>
             <button id="back-button" class="btn-back">Atrás</button> <!-- Botón de Atrás -->
@@ -95,4 +174,5 @@
     </div>
 </body>
 <script src="../../js/index.js"></script>
+
 </html>

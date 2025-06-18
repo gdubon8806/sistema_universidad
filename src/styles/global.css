@@ -23,7 +23,7 @@ h2 {
     margin-top: 10px;
 }
 
-.encabezado-contenedor {
+.navBar-contenedor {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -214,7 +214,7 @@ h2 {
     background-color: #aaa;
 }
 
-.matriculas-encabezado {
+.encabezado-contenedor {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -222,13 +222,13 @@ h2 {
     padding: 0 20px;
 }
 
-.matriculas-encabezado h1 {
+.encabezado-contenedor h1 {
     flex-grow: 1;
     text-align: center;
     margin: 0;
 }
 
-.matriculas-encabezado button {
+.encabezado-contenedor button {
     margin-left: auto;
 }
 
