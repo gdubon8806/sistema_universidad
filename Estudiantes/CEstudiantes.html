@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="SEstudiante.css">
+    <title>Estudiantes</title>
+</head>
+<body>
+    <header class="encabezado">Gestion de Estudiantes</header>
+    <div class="container">
+        <form id="form-Estudiante">
+            <div class="espacio">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" required/>
+            </div>
+            <div class="espacio">
+                <label for="Apellido">Apellido:</label>
+                <input type="text" id="apeliido" required/>
+            </div>
+            <div class="espacio">
+                <label for="correo">Correo:</label>
+                <input type="text" id="correo" required/>
+            </div>
+            <div class="espacio">
+                <label for="telefono">Telefono:</label>
+                <input type="tel" id="telefono" required/>
+            </div>
+            <div class="espacio">
+                <label for="modalidad">Modalidad:</label>
+                <select id="modalidad" required>
+                    <option value="presencial">Presencial</option>
+                    <option value="virtual">Virtual</option>
+                </select>
+            </div >
+            <div class="espacio">
+                <label for="carrera">Carrera:</label>
+                <input type="text" id="carrera" required/>
+            </div>
+            <button type="submit" id="btn">Agregar</button>
+            <button type="submit" id="btn">Actualizar</button>
+            <button type="submit" id="btn">Eliminar</button>
+            <button type="submit" id="btn">Editar</button>
+        </form>
+        <table id="tabla">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Modalidad</th>
+                    <th>Carrera</th>
+                </tr>
+            </thead>
+            <tbody id="ta_estu">
+                <tr>
+                    <td>1</td>
+                    <td>Jared</td>
+                    <td>Trujillo</td>
+                    <td>jaredtrujillo@gmail.com</td>
+                    <td>33277187</td>
+                    <td>Presencial</td>
+                    <td>Ingenieria en informatica</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
