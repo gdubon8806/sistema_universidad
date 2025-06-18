@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../styles/global.css">
+    <!-- <link rel="stylesheet" href="../../styles/index.css"> -->
+</head>
+<body>
+    <div class="encabezado-contenedor">
+        <h1>Panel Administrativo Universitario</h1>
+        <div class="menu-container">
+          <a class="btn-primario" href="../">Inicio</a>
+            <a class="btn-primario" href="#">Matrículas</a>
+            <a class="btn-primario" href="../Estudiantes/">Estudiantes</a>
+            <a class="btn-primario" href="../Profesores/">Profesores</a> 
+            <a class="btn-primario" href="#">Carreras</a>
+            <a class="btn-primario" href="#">Cursos</a>
+            <a class="btn-primario" href="#">Secciones</a>
+        </div>
+    </div>
+    
+    <div class="matriculas-encabezado">
+        <h1>Matrículas</h1>
+        <button class="btn-primario" id="abrir-modal">Nueva matrícula</button>
+    </div>
+
+    <div id="matriculas-contenedor"></div>
+    <!-- Plantilla para tarjetas de reservas -->
+    
+    <template id="reserva-plantilla">
+        <div class="tarjeta">
+            <div class="tarjeta-img">
+                <img src="/img/habitacion.png" alt="Reserva">
+            </div>
+            <div class="tarjeta-contenido">
+                <h3 class="tarjeta-titulo"></h3>
+                <p class="tarjeta-nombre-cliente"></p>
+                <p class="tarjeta-fecha-inicio-reserva"></p>
+                <p class="tarjeta-fecha-salida-reserva"></p>
+                <p class="tarjeta-num-habitacion"></p>
+                <p class="tarjeta-piso"></p>
+                <p class="tarjeta-precio_total"></p>
+                <p class="tarjeta-estado"></p>
+                <button class="btn-eliminar" data-id="">Eliminar</button> <!-- Botón de eliminar -->
+            </div>
+        </div>
+    </template>
+
+    <!-- Modal de formulario de agregar matricula -->
+    <div id="modal" class="modal hidden">
+        <div class="modal-contenido">
+            <span id="cerrar-modal" class="cerrar">&times;</span>
+            <h2>Matricular alumno</h2>
+            <form id="reserva-form">
+                <label for="nombre">Nombre del estudiante:</label>
+                <select id="nombre" name="nombre" required>
+                    <option value="" disabled selected>Seleccione un alumno</option>
+                    <!-- Las opciones se llenarán dinámicamente desde la base de datos -->
+                </select>
+                
+                <label for="fecha-inicio">Fecha de Inicio:</label>
+                <input type="date" id="fecha-inicio" name="fecha-inicio" required>
+                
+                <label for="fecha-salida">Fecha de Salida:</label>
+                <input type="date" id="fecha-salida" name="fecha-salida" required>
+                
+                <label for="habitacion">Número de Habitación:</label>
+                <select id="habitacion" name="habitacion" required>
+                    <option value="" disabled selected>Seleccione una habitación</option>
+                    <!-- Las opciones se llenarán dinámicamente desde la base de datos -->
+                </select>
+                
+                <label for="numero-adultos">Número de Adultos:</label>
+                <input type="number" id="numero-adultos" name="numero_adultos" min="1" required>
+
+                <label for="numero-ninos">Número de Niños:</label>
+                <input type="number" id="numero-ninos" name="numero_ninos" min="0" required>
+                                
+                <label for="precio">Precio Total:</label>
+                <input type="number" id="precio" name="precio" readonly>
+                
+                <label for="estado">Estado:</label>
+                <select id="estado" name="estado" required>
+                    <option value="confirmada">Confirmada</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="cancelada">Cancelada</option>
+                </select>
+                
+                <button type="submit">Aceptar</button>
+            </form>
+            <button id="back-button" class="btn-back">Atrás</button> <!-- Botón de Atrás -->
+        </div>
+    </div>
+</body>
+<script src="../../js/index.js"></script>
+</html>

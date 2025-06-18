@@ -37,48 +37,50 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     //PARA CARGAR RESERVAS 
-    try {
-        // Simulando una petición a tu backend
-        const respuesta = await fetch("http://localhost:3000/reservas"); // Ajusta la URL según tu servidor
-        const reservas = await respuesta.json(); // Suponiendo que el backend devuelve JSON con clientes
-        // console.log(reservas);
-        if (reservas.length === 0) {
-            // Mostrar mensaje si no hay reservas
-            const mensaje = document.createElement("p");
-            mensaje.textContent = "No hay ninguna reserva.";
-            mensaje.classList.add("no-reservas"); // Clase opcional para estilos
-            reservasContainer.appendChild(mensaje);
-        } else {
+    async function cargarMatriculas() {
+        try {
+            // Simulando una petición a tu backend
+            const respuesta = await fetch("http://localhost:3000/reservas"); // Ajusta la URL según tu servidor
+            const reservas = await respuesta.json(); // Suponiendo que el backend devuelve JSON con clientes
+            // console.log(reservas);
+            if (reservas.length === 0) {
+                // Mostrar mensaje si no hay reservas
+                const mensaje = document.createElement("p");
+                mensaje.textContent = "No hay ninguna reserva.";
+                mensaje.classList.add("no-reservas"); // Clase opcional para estilos
+                reservasContainer.appendChild(mensaje);
+            } else {
 
-            reservas.forEach(reserva => {
-                let fechaLLegada = formatearFecha(reserva.fecha_llegada);
-                let fechaSalida = formatearFecha(reserva.fecha_salida);
-                const clone = document.importNode(reservaTemplate, true);
-                clone.querySelector(".tarjeta-titulo").textContent = "Reserva No. " + reserva.reserva_id;
-                clone.querySelector(".tarjeta-nombre-cliente").textContent = "Nombre de cliente: " + reserva.nombre + " " + reserva.apellido;
-                
-                clone.querySelector(".tarjeta-fecha-inicio-reserva").textContent = "Fecha de inicio: " + fechaLLegada;
-                
-                clone.querySelector(".tarjeta-fecha-salida-reserva").textContent = "Fecha de salida: " + fechaSalida;
-                
-                clone.querySelector(".tarjeta-num-habitacion").textContent = "Número de habitación: " + reserva.numero_habitacion;
-                clone.querySelector(".tarjeta-piso").textContent = "Piso " + reserva.piso;
-                clone.querySelector(".tarjeta-precio_total").textContent = "L. " + reserva.precio_total;
-                clone.querySelector(".tarjeta-estado").textContent = reserva.estado;
-                
-                const deleteButton = clone.querySelector(".btn-eliminar");
-                deleteButton.setAttribute("data-id", reserva.reserva_id);
-                // Agregar el evento de eliminación al botón
-                deleteButton.addEventListener("click", eliminarReserva);
-                
-                reservasContainer.appendChild(clone);
-            });
+                reservas.forEach(reserva => {
+                    let fechaLLegada = formatearFecha(reserva.fecha_llegada);
+                    let fechaSalida = formatearFecha(reserva.fecha_salida);
+                    const clone = document.importNode(reservaTemplate, true);
+                    clone.querySelector(".tarjeta-titulo").textContent = "Reserva No. " + reserva.reserva_id;
+                    clone.querySelector(".tarjeta-nombre-cliente").textContent = "Nombre de cliente: " + reserva.nombre + " " + reserva.apellido;
+
+                    clone.querySelector(".tarjeta-fecha-inicio-reserva").textContent = "Fecha de inicio: " + fechaLLegada;
+
+                    clone.querySelector(".tarjeta-fecha-salida-reserva").textContent = "Fecha de salida: " + fechaSalida;
+
+                    clone.querySelector(".tarjeta-num-habitacion").textContent = "Número de habitación: " + reserva.numero_habitacion;
+                    clone.querySelector(".tarjeta-piso").textContent = "Piso " + reserva.piso;
+                    clone.querySelector(".tarjeta-precio_total").textContent = "L. " + reserva.precio_total;
+                    clone.querySelector(".tarjeta-estado").textContent = reserva.estado;
+
+                    const deleteButton = clone.querySelector(".btn-eliminar");
+                    deleteButton.setAttribute("data-id", reserva.reserva_id);
+                    // Agregar el evento de eliminación al botón
+                    deleteButton.addEventListener("click", eliminarReserva);
+
+                    reservasContainer.appendChild(clone);
+                });
+            }
+        } catch (error) {
+            console.error("Error al obtener reservas:", error);
         }
-    } catch (error) {
-        console.error("Error al obtener reservas:", error);
     }
 
-    // Función para cargar los clientes desde la API
+    // Función para cargar los clientes desde la API al modal
     const cargarClientes = async () => {
         try {
             const response = await fetch('http://localhost:3000/clientes'); // Asegúrate de que el endpoint sea correcto
@@ -101,7 +103,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     cargarClientes();
 
-    // Función para cargar las habitaciones desde la API
+    // Función para cargar las habitaciones desde la API al modal
     const cargarHabitaciones = async () => {
         try {
             const response = await fetch('http://localhost:3000/habitaciones'); // Asegúrate de que el endpoint sea correcto
@@ -122,7 +124,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     };
 
-    // Función para calcular el precio total
+    // Función para calcular el precio total al modal
     const calcularPrecio = () => {
         const fechaInicio = new Date(fechaInicioInput.value);
         const fechaSalida = new Date(fechaSalidaInput.value);
@@ -143,18 +145,17 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         }
     };
-
+    cargarHabitaciones();
     // Escuchar cambios en las fechas y la habitación seleccionada
     fechaInicioInput.addEventListener("change", calcularPrecio);
     fechaSalidaInput.addEventListener("change", calcularPrecio);
     habitacionDropdown.addEventListener("change", calcularPrecio);
 
-    cargarHabitaciones();
+
 
     // Función para enviar la reserva a la API
     const enviarReserva = async (event) => {
         event.preventDefault();
-
         // Capturar los datos del formulario
         const nuevaReserva = {
             cliente_id: document.getElementById("nombre").value, // ID del cliente seleccionado
@@ -195,60 +196,27 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Agregar el event listener al formulario
     reservaForm.addEventListener("submit", enviarReserva);
-});
 
-const eliminarReserva = async (event) => {
-    const reservaId = event.target.getAttribute("data-id"); // Obtener el ID de la reserva
+    const eliminarReserva = async (event) => {
+        const reservaId = event.target.getAttribute("data-id"); // Obtener el ID de la reserva
 
-    if (confirm("¿Estás seguro de que deseas eliminar esta reserva?")) {
-        try {
-            const response = await fetch(`http://localhost:3000/reservas/${reservaId}`, {
-                method: 'DELETE'
-            });
+        if (confirm("¿Estás seguro de que deseas eliminar esta reserva?")) {
+            try {
+                const response = await fetch(`http://localhost:3000/reservas/${reservaId}`, {
+                    method: 'DELETE'
+                });
 
-            if (response.ok) {
-                alert('Reserva eliminada correctamente');
-                location.reload() // Recargar las reservas dinámicamente
-            } else {
+                if (response.ok) {
+                    alert('Reserva eliminada correctamente');
+                    location.reload() // Recargar las reservas dinámicamente
+                } else {
+                    alert('Error al eliminar la reserva');
+                }
+            } catch (error) {
+                console.error('Error al eliminar la reserva:', error);
                 alert('Error al eliminar la reserva');
             }
-        } catch (error) {
-            console.error('Error al eliminar la reserva:', error);
-            alert('Error al eliminar la reserva');
         }
-    }
-};
-
-function formatearFecha(fechaString) {
-    /**
-     * Parsea una cadena de fecha en formato ISO 8601 (como "2025-03-27T00:00:00.000Z")
-     * al formato de fecha de Honduras "día/mes/año".
-     *
-     * @param {string} fechaString La cadena de fecha en formato ISO 8601.
-     * @returns {string|null} La fecha formateada en "día/mes/año" o null si la entrada no es válida.
-     */
-    if (!fechaString || typeof fechaString !== 'string') {
-        console.error("Error: La entrada debe ser una cadena de texto válida.");
-        return null;
-    }
-
-    try {
-        const fechaObjeto = new Date(fechaString);
-
-        if (isNaN(fechaObjeto.getTime())) {
-            console.error("Error: No se pudo crear un objeto Date válido a partir de la entrada.");
-            return null;
-        }
-
-        const dia = fechaObjeto.getDate();
-        const mes = fechaObjeto.getMonth() + 1; // getMonth() devuelve 0-11
-        const año = fechaObjeto.getFullYear();
-
-        return `${dia}/${mes}/${año}`;
-
-    } catch (error) {
-        console.error("Error al parsear la fecha:", error);
-        return null;
-    }
-}
+    };
+});
 
