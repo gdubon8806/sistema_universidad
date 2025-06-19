@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,15 +8,17 @@
     <link rel="stylesheet" href="../../styles/global.css">
     <title>Estudiantes</title>
 </head>
+
 <body>
     <div class="navBar-contenedor">
         <h1>Panel Administrativo Universitario</h1>
         <div class="menu-container">
-          <a class="btn-primario" href="../">Inicio</a>
+            <a class="btn-primario" href="../">Inicio</a>
             <a class="btn-primario" href="../Matriculas/">Matrículas</a>
             <a class="btn-primario" href="#">Estudiantes</a>
-            <a class="btn-primario" href="../Profesores/">Profesores</a> 
-            <a class="btn-primario" href="#">Carreras</a>
+            <a class="btn-primario" href="../Profesores/">Profesores</a>
+            <a class="btn-primario" href="../Admisiones/">Admisiones</a>
+            <a class="btn-primario" href="../Carreras/">Carreras</a>
             <a class="btn-primario" href="#">Cursos</a>
             <a class="btn-primario" href="#">Secciones</a>
         </div>
@@ -25,19 +28,19 @@
         <form id="form-Estudiante">
             <div class="espacio">
                 <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" required/>
+                <input type="text" id="nombre" required />
             </div>
             <div class="espacio">
                 <label for="Apellido">Apellido:</label>
-                <input type="text" id="apeliido" required/>
+                <input type="text" id="apeliido" required />
             </div>
             <div class="espacio">
                 <label for="correo">Correo:</label>
-                <input type="text" id="correo" required/>
+                <input type="text" id="correo" required />
             </div>
             <div class="espacio">
                 <label for="telefono">Telefono:</label>
-                <input type="tel" id="telefono" required/>
+                <input type="tel" id="telefono" required />
             </div>
             <div class="espacio">
                 <label for="modalidad">Modalidad:</label>
@@ -45,10 +48,10 @@
                     <option value="presencial">Presencial</option>
                     <option value="virtual">Virtual</option>
                 </select>
-            </div >
+            </div>
             <div class="espacio">
                 <label for="carrera">Carrera:</label>
-                <input type="text" id="carrera" required/>
+                <input type="text" id="carrera" required />
             </div>
             <button type="submit" id="btn">Agregar</button>
             <button type="submit" id="btn">Actualizar</button>
@@ -81,4 +84,5 @@
         </table>
     </div>
 </body>
+
 </html>

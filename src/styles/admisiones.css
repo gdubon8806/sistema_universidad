@@ -1,0 +1,264 @@
+#btn-nueva-admision {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 24px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#btn-nueva-admision:hover {
+  background: #125ea7;
+}
+
+.modal-nueva-admision {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  overflow: auto;
+  background: rgba(0,0,0,0.4);
+}
+.modal-nueva-admision-content {
+  background: #fff;
+  padding: 30px 24px 20px 24px;
+  border-radius: 10px;
+  width: 98%;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-nueva-admision-close {
+  color: #aaa;
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  font-size: 2em;
+  font-weight: bold;
+  cursor: pointer;
+}
+.modal-nueva-admision-close:hover { color: #e53935; }
+#form-nueva-admision label {
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  color: #333;
+  font-weight: 500;
+}
+
+#form-nueva-admision {
+  padding: 1rem
+}
+#form-nueva-admision input, #form-nueva-admision select {
+  width: 100%;
+  padding: 7px 10px;
+  margin-bottom: 10px;
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  font-size: 1em;
+}
+.btn-guardar-admision {
+  background: #43a047;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s;
+}
+.btn-guardar-admision:hover {
+  background: #357a38;
+}
+
+/* Botones de acciones en la tabla */
+.btn-ver, .btn-aceptar, .btn-rechazar {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  margin-right: 4px;
+  font-size: 0.95em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-ver {
+  background: #1976d2;
+  color: #fff;
+}
+.btn-ver:hover {
+  background: #125ea7;
+}
+.btn-aceptar {
+  background: #43a047;
+  color: #fff;
+}
+.btn-aceptar:hover {
+  background: #357a38;
+}
+.btn-rechazar {
+  background: #e53935;
+  color: #fff;
+}
+.btn-rechazar:hover {
+  background: #ab2320;
+}
+
+.dashboard-title {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 24px;
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.dashboard-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.dashboard-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  display: flex;
+  align-items: center;
+  min-width: 220px;
+  max-width: 260px;
+  flex: 1 1 220px;
+  padding: 22px 24px;
+  transition: box-shadow 0.2s, transform 0.2s;
+  border: 1.5px solid #e3e8ee;
+}
+
+.dashboard-card:hover {
+  box-shadow: 0 8px 32px rgba(25, 118, 210, 0.18), 0 2px 8px rgba(0,0,0,0.13);
+  transform: translateY(-4px) scale(1.03);
+}
+
+.dashboard-card-icon {
+  font-size: 2.5em;
+  margin-right: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #e3f0fc;
+  flex-shrink: 0;
+}
+
+.dashboard-card-icon.admisiones-general { background: #e3f0fc; color: #1976d2; }
+.dashboard-card-icon.informatica { background: #e3f0fc; color: #1976d2; }
+.dashboard-card-icon.administracion { background: #fff9e3; color: #fbc02d; }
+.dashboard-card-icon.derecho { background: #f3e3fc; color: #8e24aa; }
+.dashboard-card-icon.medicina { background: #e3fcec; color: #43a047; }
+.dashboard-card-icon.psicologia { background: #fde3e3; color: #e53935; }
+
+.dashboard-card-title {
+  font-size: 1.08em;
+  color: #555;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.dashboard-card-metric {
+  font-size: 2em;
+  font-weight: bold;
+  color: #1976d2;
+  letter-spacing: 1px;
+}
+
+.admisiones-table {
+  width: 100%;
+  max-width: 98vw;
+  margin: 30px auto 40px auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(25, 118, 210, 0.08), 0 1.5px 4px rgba(0,0,0,0.07);
+  overflow: hidden;
+  font-family: inherit;
+}
+
+.admisiones-table thead {
+  background: #1976d2;
+  color: #fff;
+}
+
+.admisiones-table th, .admisiones-table td {
+  padding: 14px 18px;
+  text-align: left;
+}
+
+.admisiones-table th {
+  font-size: 1.08em;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #1565c0;
+}
+
+.admisiones-table tbody tr {
+  transition: background 0.18s;
+}
+
+.admisiones-table tbody tr:nth-child(even) {
+  background: #f5f7fa;
+}
+
+.admisiones-table tbody tr:hover {
+  background: #e3f0fc;
+}
+
+.admisiones-table td {
+  color: #333;
+  font-size: 1em;
+  border-bottom: 1px solid #e3e8ee;
+}
+
+.admisiones-table td:last-child {
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .dashboard-cards { flex-direction: column; align-items: center; }
+  .dashboard-card { width: 90%; max-width: 400px; }
+  .admisiones-table, .admisiones-table thead, .admisiones-table tbody, .admisiones-table th, .admisiones-table td, .admisiones-table tr {
+    display: block;
+  }
+  .admisiones-table thead {
+    display: none;
+  }
+  .admisiones-table tr {
+    margin-bottom: 18px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.07);
+    background: #fff;
+    padding: 10px 0;
+  }
+  .admisiones-table td {
+    padding: 10px 16px;
+    border: none;
+    position: relative;
+  }
+  .admisiones-table td:before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #1976d2;
+    display: block;
+    margin-bottom: 4px;
+  }
+}
+
+
+
+
+

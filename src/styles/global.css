@@ -45,6 +45,21 @@ h2 {
     font-size: 0.83rem;
 }
 
+.navBar-contenedor .btn-primario {
+    background-color: transparent;
+}
+
+.navBar-contenedor .btn-primario:hover {
+    background-color: #555;
+    color: white;
+}
+
+.navBar-contenedor .btn-primario:active {
+    background-color: #555;
+    color: white;
+    box-shadow: none;
+}
+
 .btn-primary:hover {
     background-color: #45a049;
 }

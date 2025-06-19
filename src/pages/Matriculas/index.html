@@ -17,7 +17,8 @@
             <a class="btn-primario" href="#">Matrículas</a>
             <a class="btn-primario" href="../Estudiantes/">Estudiantes</a>
             <a class="btn-primario" href="../Profesores/">Profesores</a>
-            <a class="btn-primario" href="#">Carreras</a>
+            <a class="btn-primario" href="../Admisiones/">Admisiones</a>
+            <a class="btn-primario" href="../Carreras/">Carreras</a>
             <a class="btn-primario" href="#">Cursos</a>
             <a class="btn-primario" href="#">Secciones</a>
         </div>
@@ -28,7 +29,39 @@
         <button class="btn-primario" id="abrir-modal">Nueva matrícula</button>
     </div>
 
-    <h3 class="table-title">Matrículas realizadas</h3>
+    <h2 class="dashboard-title">Dashboard de Matrículas</h2>
+    <div class="dashboard-cards">
+        <div class="dashboard-card">
+            <div class="dashboard-card-icon matriculas-general">📝</div>
+            <div>
+                <div class="dashboard-card-title">Matrículas generales (2025-1)</div>
+                <div class="dashboard-card-metric">1,200</div>
+            </div>
+        </div>
+        <div class="dashboard-card">
+            <div class="dashboard-card-icon estudiantes">👨‍🎓</div>
+            <div>
+                <div class="dashboard-card-title">Estudiantes matriculados</div>
+                <div class="dashboard-card-metric">1,050</div>
+            </div>
+        </div>
+        <div class="dashboard-card">
+            <div class="dashboard-card-icon materias">📚</div>
+            <div>
+                <div class="dashboard-card-title">Materias activas</div>
+                <div class="dashboard-card-metric">85</div>
+            </div>
+        </div>
+        <div class="dashboard-card">
+            <div class="dashboard-card-icon secciones">🏫</div>
+            <div>
+                <div class="dashboard-card-title">Secciones abiertas</div>
+                <div class="dashboard-card-metric">160</div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="table-title">Matrículas recientes</h3>
     <table class="matriculas-table">
         <thead>
             <tr>
@@ -43,68 +76,47 @@
         </thead>
         <tbody>
             <tr>
-                <td>1001</td>
-                <td>Ana Pérez</td>
-                <td>Ingeniería Informática</td>
-                <td>Programación I</td>
-                <td>2025-06-10</td>
-                <td>Activa</td>
-                <td>
-                    <button class="btn-edit">Editar</button>
-                    <button class="btn-delete">Eliminar</button>
+                <td data-label="ID Matrícula">3001</td>
+                <td data-label="Estudiante">Ana Pérez</td>
+                <td data-label="Carrera">Ingeniería Informática</td>
+                <td data-label="Materia">Programación I</td>
+                <td data-label="Fecha">2025-06-10</td>
+                <td data-label="Estado">Activa</td>
+                <td data-label="Acciones">
+                    <button class="btn-ver">Ver</button>
+                    <button class="btn-editar">Editar</button>
+                    <button class="btn-eliminar">Eliminar</button>
                 </td>
             </tr>
             <tr>
-                <td>1002</td>
-                <td>Carlos Gómez</td>
-                <td>Administración</td>
-                <td>Contabilidad</td>
-                <td>2025-06-11</td>
-                <td>Activa</td>
-                <td>
-                    <button class="btn-edit">Editar</button>
-                    <button class="btn-delete">Eliminar</button>
+                <td data-label="ID Matrícula">3002</td>
+                <td data-label="Estudiante">Carlos Gómez</td>
+                <td data-label="Carrera">Administración</td>
+                <td data-label="Materia">Contabilidad</td>
+                <td data-label="Fecha">2025-06-11</td>
+                <td data-label="Estado">Activa</td>
+                <td data-label="Acciones">
+                    <button class="btn-ver">Ver</button>
+                    <button class="btn-editar">Editar</button>
+                    <button class="btn-eliminar">Eliminar</button>
                 </td>
             </tr>
             <tr>
-                <td>1003</td>
-                <td>Lucía Torres</td>
-                <td>Derecho</td>
-                <td>Derecho Civil</td>
-                <td>2025-06-12</td>
-                <td>Pendiente</td>
-                <td>
-                    <button class="btn-edit">Editar</button>
-                    <button class="btn-delete">Eliminar</button>
-                </td>
-            </tr>
-            <tr>
-                <td>1004</td>
-                <td>Juan Ruiz</td>
-                <td>Medicina</td>
-                <td>Anatomía</td>
-                <td>2025-06-13</td>
-                <td>Activa</td>
-                <td>
-                    <button class="btn-edit">Editar</button>
-                    <button class="btn-delete">Eliminar</button>
-                </td>
-            </tr>
-            <tr>
-                <td>1005</td>
-                <td>María López</td>
-                <td>Psicología</td>
-                <td>Psicología General</td>
-                <td>2025-06-14</td>
-                <td>Cancelada</td>
-                <td>
-                    <button class="btn-edit">Editar</button>
-                    <button class="btn-delete">Eliminar</button>
+                <td data-label="ID Matrícula">3003</td>
+                <td data-label="Estudiante">Lucía Torres</td>
+                <td data-label="Carrera">Derecho</td>
+                <td data-label="Materia">Derecho Civil</td>
+                <td data-label="Fecha">2025-06-12</td>
+                <td data-label="Estado">Pendiente</td>
+                <td data-label="Acciones">
+                    <button class="btn-ver">Ver</button>
+                    <button class="btn-editar">Editar</button>
+                    <button class="btn-eliminar">Eliminar</button>
                 </td>
             </tr>
         </tbody>
     </table>
-    
+
     <div id="matriculas-contenedor"></div>
     <!-- Plantilla para tarjetas de reservas  -->
 
