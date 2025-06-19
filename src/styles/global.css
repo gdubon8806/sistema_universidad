@@ -1,0 +1,307 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+/* CONTAINERS */
+.menu-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.navBar-contenedor {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+}
+
+/*BOTTOMS */
+.btn-primario {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #4CAF50;
+    color: white;
+    padding: 7px 15px;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.83rem;
+}
+
+.navBar-contenedor .btn-primario {
+    background-color: transparent;
+}
+
+.navBar-contenedor .btn-primario:hover {
+    background-color: #555;
+    color: white;
+}
+
+.navBar-contenedor .btn-primario:active {
+    background-color: #555;
+    color: white;
+    box-shadow: none;
+}
+
+.btn-primary:hover {
+    background-color: #45a049;
+}
+
+.btn-primario:active {
+    outline: none;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* 
+.btn-b {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #0a59ad;
+    color: white;
+    padding: 7px 15px;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.83rem;
+}
+.btn-b:hover {
+    background-color: #124d8d;
+} */
+
+/* .btn-c {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #ff9800;
+    color: white;
+    padding: 7px 15px;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.83rem;
+    font-weight: bold;
+}
+
+.btn-c:hover {
+    background-color: #e68900; 
+}
+
+.btn-c:active {
+    background-color: #cc7a00; 
+} */
+
+
+
+#reservas-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-contenido {
+    overflow: auto;
+    height: 90%;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cerrar {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Estilos para el formulario dentro del modal */
+#reserva-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#reserva-form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+#reserva-form input,
+#reserva-form select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#reserva-form input:focus,
+#reserva-form select:focus {
+    outline: none;
+    border-color: #0a59ad;
+    box-shadow: 0 0 5px rgba(10, 89, 173, 0.5);
+}
+
+#reserva-form button {
+    background-color: #0a59ad;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+#reserva-form button:hover {
+    background-color: #124d8d;
+}
+
+#reserva-form button:active {
+    background-color: #0a3d73;
+}
+
+.modal-contenido h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #0a59ad;
+}
+
+/* Estilos para el botón de "Atrás" */
+.btn-back {
+    background-color: #ccc;
+    color: #333;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 15px;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.btn-back:hover {
+    background-color: #bbb;
+}
+
+.btn-back:active {
+    background-color: #aaa;
+}
+
+.encabezado-contenedor {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 0;
+    padding: 0 20px;
+}
+
+.encabezado-contenedor h1 {
+    flex-grow: 1;
+    text-align: center;
+    margin: 0;
+}
+
+.encabezado-contenedor button {
+    margin-left: auto;
+}
+
+#nombre {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#nombre:focus {
+    outline: none;
+    border-color: #0a59ad;
+    box-shadow: 0 0 5px rgba(10, 89, 173, 0.5);
+}
+
+#habitacion {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#habitacion:focus {
+    outline: none;
+    border-color: #0a59ad;
+    box-shadow: 0 0 5px rgba(10, 89, 173, 0.5);
+}
+
+#precio[readonly] {
+    background-color: #f4f4f4;
+    color: #333;
+    cursor: not-allowed;
+}
+
+.no-reservas {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #555;
+    margin-top: 20px;
+}
+
+#btn-atras-reservas {
+    background-color: #f44336;
+    /* Rojo */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+#btn-atras-reservas:hover {
+    background-color: #d32f2f;
+    /* Rojo más oscuro */
+}

@@ -1,0 +1,188 @@
+.table-title {
+  text-align: center;
+  font-size: 1.3em;
+  margin: 30px 0 10px 0;
+  color: #333;
+  font-weight: 500;
+}
+
+.matriculas-table {
+  width: 100%;
+  max-width: 1100px;
+  margin: 30px auto 40px auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(25, 118, 210, 0.08), 0 1.5px 4px rgba(0,0,0,0.07);
+  overflow: hidden;
+  font-family: inherit;
+}
+
+.matriculas-table thead {
+  background: #1976d2;
+  color: #fff;
+}
+
+.matriculas-table th, .matriculas-table td {
+  padding: 14px 18px;
+  text-align: left;
+}
+
+.matriculas-table th {
+  font-size: 1.08em;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #1565c0;
+}
+
+.matriculas-table tbody tr {
+  transition: background 0.18s;
+}
+
+.matriculas-table tbody tr:nth-child(even) {
+  background: #f5f7fa;
+}
+
+.matriculas-table tbody tr:hover {
+  background: #e3f0fc;
+}
+
+.matriculas-table td {
+  color: #333;
+  font-size: 1em;
+  border-bottom: 1px solid #e3e8ee;
+}
+
+.matriculas-table td:last-child {
+  white-space: nowrap;
+}
+
+.btn-ver, .btn-editar, .btn-eliminar {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  margin-right: 4px;
+  font-size: 0.95em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-ver {
+  background: #1976d2;
+  color: #fff;
+}
+.btn-ver:hover {
+  background: #125ea7;
+}
+.btn-editar {
+  background: #43a047;
+  color: #fff;
+}
+.btn-editar:hover {
+  background: #357a38;
+}
+.btn-eliminar {
+  background: #e53935;
+  color: #fff;
+}
+.btn-eliminar:hover {
+  background: #ab2320;
+}
+
+.dashboard-title {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 24px;
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.dashboard-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.dashboard-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  display: flex;
+  align-items: center;
+  min-width: 220px;
+  max-width: 260px;
+  flex: 1 1 220px;
+  padding: 22px 24px;
+  transition: box-shadow 0.2s, transform 0.2s;
+  border: 1.5px solid #e3e8ee;
+}
+
+.dashboard-card:hover {
+  box-shadow: 0 8px 32px rgba(25, 118, 210, 0.18), 0 2px 8px rgba(0,0,0,0.13);
+  transform: translateY(-4px) scale(1.03);
+}
+
+.dashboard-card-icon {
+  font-size: 2.5em;
+  margin-right: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #e3f0fc;
+  flex-shrink: 0;
+}
+
+.dashboard-card-icon.matriculas-general { background: #e3f0fc; color: #1976d2; }
+.dashboard-card-icon.estudiantes { background: #e3f0fc; color: #1976d2; }
+.dashboard-card-icon.materias { background: #fff9e3; color: #fbc02d; }
+.dashboard-card-icon.secciones { background: #f3e3fc; color: #8e24aa; }
+
+.dashboard-card-title {
+  font-size: 1.08em;
+  color: #555;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.dashboard-card-metric {
+  font-size: 2em;
+  font-weight: bold;
+  color: #1976d2;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 900px) {
+  .dashboard-cards { flex-direction: column; align-items: center; }
+  .dashboard-card { width: 90%; max-width: 400px; }
+  .matriculas-table, .matriculas-table thead, .matriculas-table tbody, .matriculas-table th, .matriculas-table td, .matriculas-table tr {
+    display: block;
+  }
+  .matriculas-table thead {
+    display: none;
+  }
+  .matriculas-table tr {
+    margin-bottom: 18px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.07);
+    background: #fff;
+    padding: 10px 0;
+  }
+  .matriculas-table td {
+    padding: 10px 16px;
+    border: none;
+    position: relative;
+  }
+  .matriculas-table td:before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #1976d2;
+    display: block;
+    margin-bottom: 4px;
+  }
+}
+
