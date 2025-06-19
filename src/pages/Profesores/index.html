@@ -25,15 +25,13 @@
   </div>
   <h1>Gestión de Profesores</h1>
 
-  <form id="form-profesor">
-    <input type="text" id="nombre" placeholder="Nombre" required>
-    <input type="text" id="especialidad" placeholder="Especialidad" required>
-    <input type="text" id="disponibilidad" placeholder="Disponibilidad" required>
-    <button type="submit">Guardar</button>
-  </form>
+  <!-- Botón para abrir el modal de agregar -->
+  <button id="abrirModal">Agregar Profesor</button>
 
+  <!-- Filtro de búsqueda -->
   <input type="text" id="filtro" placeholder="Filtrar por especialidad">
 
+  <!-- Tabla de profesores -->
   <table id="tabla-profesores">
     <thead>
       <tr>
@@ -44,9 +42,39 @@
       </tr>
     </thead>
     <tbody>
-      <!-- Aquí se agregan los profesores automáticamente -->
+      <!-- Las filas se agregarán dinámicamente -->
     </tbody>
   </table>
+
+  <!-- Modal de formulario -->
+  <div id="modalProfesor" class="modal hidden">
+    <div class="modal-content">
+      <span class="close" id="cerrarModal">&times;</span>
+      <form id="form-profesor">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" required>
+
+        <label for="especialidad">Especialidad:</label>
+        <input type="text" id="especialidad" required>
+
+        <label for="disponibilidad">Disponibilidad:</label>
+        <input type="text" id="disponibilidad" required>
+
+        <button type="submit">Guardar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal de confirmación de eliminación -->
+  <div id="modalConfirmacion" class="modal hidden">
+    <div class="modal-content">
+      <p>¿Estás seguro que deseas eliminar este profesor?</p>
+      <div style="text-align: right; margin-top: 20px;">
+        <button id="cancelarEliminar">Cancelar</button>
+        <button id="confirmarEliminar" style="background-color: #dc3545;">Eliminar</button>
+      </div>
+    </div>
+  </div>
 
   <script src="profesores.js"></script>
 </body>
