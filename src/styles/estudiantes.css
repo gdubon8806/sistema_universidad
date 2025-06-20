@@ -10,23 +10,35 @@
 .estudiantes-table {
   width: 100%;
   max-width: 98vw;
-  margin: 0 auto 40px auto;
-  border-collapse: collapse;
+  margin: 30px auto 40px auto;
+  border-collapse: separate;
+  border-spacing: 0;
   background: #fff;
-  border-radius: 8px;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(25, 118, 210, 0.08), 0 1.5px 4px rgba(0,0,0,0.07);
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-}
-
-.estudiantes-table th,
-.estudiantes-table td {
-  padding: 12px 16px;
-  text-align: left;
+  font-family: inherit;
 }
 
 .estudiantes-table thead {
   background: #1976d2;
   color: #fff;
+}
+
+.estudiantes-table th, .estudiantes-table td {
+  padding: 12px 14px;
+  text-align: left;
+}
+
+.estudiantes-table th {
+  font-size: 1.08em;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #1565c0;
+}
+
+.estudiantes-table tbody tr {
+  transition: background 0.18s;
 }
 
 .estudiantes-table tbody tr:nth-child(even) {
@@ -37,12 +49,10 @@
   background: #e3f0fc;
 }
 
-.estudiantes-table td:last-child {
-  font-weight: bold;
-}
-
 .estudiantes-table td {
   color: #333;
+  font-size: 1em;
+  border-bottom: 1px solid #e3e8ee;
 }
 
 /* Botones dentro de la tabla */
@@ -73,4 +83,169 @@
 
 .btn-delete:hover {
   background: #ab2320;
+}
+
+.btn-actualizar-estudiante {
+  background: #ffb300;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 7px 18px;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255, 179, 0, 0.10);
+  transition: background 0.2s, transform 0.15s;
+  margin: 0 2px;
+  letter-spacing: 0.5px;
+}
+
+.btn-actualizar-estudiante:hover {
+  background: #ff9800;
+  transform: translateY(-2px) scale(1.04);
+}
+
+.dashboard-title {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 24px;
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.dashboard-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.dashboard-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  display: flex;
+  align-items: center;
+  min-width: 220px;
+  max-width: 260px;
+  flex: 1 1 220px;
+  padding: 22px 24px;
+  transition: box-shadow 0.2s, transform 0.2s;
+  border: 1.5px solid #e3e8ee;
+}
+
+.dashboard-card:hover {
+  box-shadow: 0 8px 32px rgba(25, 118, 210, 0.18), 0 2px 8px rgba(0,0,0,0.13);
+  transform: translateY(-4px) scale(1.03);
+}
+
+.dashboard-card-icon {
+  font-size: 2.5em;
+  margin-right: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #e3f0fc;
+  flex-shrink: 0;
+}
+
+.dashboard-card-icon.estudiantes-total { background: #e3f0fc; color: #1976d2; }
+.dashboard-card-icon.estudiantes-activos { background: #e3fcec; color: #43a047; }
+.dashboard-card-icon.estudiantes-inactivos { background: #fde3e3; color: #e53935; }
+.dashboard-card-icon.estudiantes-carreras { background: #fff9e3; color: #fbc02d; }
+
+.dashboard-card-title {
+  font-size: 1.08em;
+  color: #555;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.dashboard-card-metric {
+  font-size: 2em;
+  font-weight: bold;
+  color: #1976d2;
+  letter-spacing: 1px;
+}
+
+/* Modal de actualizar estudiante */
+#modal-actualizar-estudiante .modal-contenido {
+  background: #fff;
+  border-radius: 14px;
+  padding: 32px 28px 24px 28px;
+  max-width: 400px;
+  width: 95vw;
+  box-shadow: 0 8px 32px rgba(25, 118, 210, 0.13), 0 2px 8px rgba(0,0,0,0.10);
+  position: relative;
+}
+
+#modal-actualizar-estudiante .cerrar {
+  position: absolute;
+  top: 14px;
+  right: 22px;
+  font-size: 2em;
+  color: #aaa;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+#modal-actualizar-estudiante .cerrar:hover {
+  color: #e53935;
+}
+
+#form-actualizar-estudiante {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#form-actualizar-estudiante label {
+  font-weight: 500;
+  color: #1976d2;
+  margin-bottom: 4px;
+}
+
+#form-actualizar-estudiante input,
+#form-actualizar-estudiante select {
+  padding: 10px 12px;
+  border: 1.5px solid #e3e8ee;
+  border-radius: 7px;
+  font-size: 1em;
+  background: #f7fafd;
+  transition: border 0.2s;
+  outline: none;
+}
+
+#form-actualizar-estudiante input:focus,
+#form-actualizar-estudiante select:focus {
+  border-color: #1976d2;
+  background: #fff;
+}
+
+.btn-primario {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
+  transition: background 0.2s, transform 0.15s;
+  margin-bottom: 18px;
+  margin-top: 8px;
+  letter-spacing: 0.5px;
+}
+
+.btn-primario:hover {
+  background: #125ea7;
+  transform: translateY(-2px) scale(1.03);
+}
+
+@media (max-width: 900px) {
+  .dashboard-cards { flex-direction: column; align-items: center; }
+  .dashboard-card { width: 90%; max-width: 400px; }
 }

@@ -14,106 +14,83 @@
         <h1>Panel Administrativo Universitario</h1>
         <div class="menu-container">
             <a class="btn-primario" href="../">Inicio</a>
-            <a class="btn-primario" href="#">Matrículas</a>
+            <a class="btn-primario" href="../Matriculas/">Matrículas</a>
             <a class="btn-primario" href="../Estudiantes/">Estudiantes</a>
             <a class="btn-primario" href="../Profesores/">Profesores</a>
-            <a class="btn-primario" href="#">Carreras</a>
-            <a class="btn-primario" href="#">Cursos</a>
-            <a class="btn-primario" href="#">Secciones</a>
+            <a class="btn-primario" href="../Admisiones/">Admisiones</a>
+            <a class="btn-primario" href="../Carreras/">Carreras</a>
+            <a class="btn-primario" href="../Cursos">Cursos</a>
+            <a class="btn-primario" href="../Secciones">Secciones</a>
+            <a class="btn-primario" href="../Calificaciones/">Calificaciones</a>
+            <a class="btn-primario" href="../Aulas/">Aulas</a>
+
         </div>
     </div>
 
     <div class="encabezado-contenedor">
         <h2>Estudiantes</h2>
-        <button class="btn-primario" id="abrir-modal">Nuevo estudiante</button>
+        <!-- <button class="btn-primario" id="abrir-modal">Nuevo estudiante</button> -->
     </div>
 
-    <h3 class="table-title">Lista de estudiantes</h3>
-    <table class="estudiantes-table" id="tabla-estudiantes">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Correo</th>
-                <th>Teléfono</th>
-                <th>Modalidad</th>
-                <th>Carrera</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="estudiantes-body">
-            <tr>
-                <td>1</td>
-                <td>Jared</td>
-                <td>Trujillo</td>
-                <td>jaredtrujillo@gmail.com</td>
-                <td>33277187</td>
-                <td>Presencial</td>
-                <td>Ingeniería en informática</td>
-                <td>
-                    <button class="btn-edit">Editar</button>
-                    <button class="btn-delete">Eliminar</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div id="matriculas-contenedor"></div>
-    <!-- Plantilla para tarjetas de reservas  -->
-
-    <template id="reserva-plantilla">
-        <div class="tarjeta">
-            <div class="tarjeta-img">
-                <img src="/img/habitacion.png" alt="Reserva">
-            </div>
-            <div class="tarjeta-contenido">
-                <h3 class="tarjeta-titulo"></h3>
-                <p class="tarjeta-nombre-cliente"></p>
-                <p class="tarjeta-fecha-inicio-reserva"></p>
-                <p class="tarjeta-fecha-salida-reserva"></p>
-                <p class="tarjeta-num-habitacion"></p>
-                <p class="tarjeta-piso"></p>
-                <p class="tarjeta-precio_total"></p>
-                <p class="tarjeta-estado"></p>
-                <button class="btn-eliminar" data-id="">Eliminar</button> <!-- Botón de eliminar -->
+    <!-- <h2 class="dashboard-title">Resumen de Estudiantes</h2>
+    <div class="dashboard-cards">
+        <div class="dashboard-card">
+            <div class="dashboard-card-icon estudiantes-total">👨‍🎓</div>
+            <div>
+                <div class="dashboard-card-title">Total estudiantes</div>
+                <div class="dashboard-card-metric">2,140</div>
             </div>
         </div>
-    </template>
+        <div class="dashboard-card">
+            <div class="dashboard-card-icon estudiantes-activos">✅</div>
+            <div>
+                <div class="dashboard-card-title">Activos</div>
+                <div class="dashboard-card-metric">1,980</div>
+            </div>
+        </div>
+        <div class="dashboard-card">
+            <div class="dashboard-card-icon estudiantes-inactivos">🚫</div>
+            <div>
+                <div class="dashboard-card-title">Inactivos</div>
+                <div class="dashboard-card-metric">160</div>
+            </div>
+        </div>
+        <div class="dashboard-card">
+            <div class="dashboard-card-icon estudiantes-carreras">📚</div>
+            <div>
+                <div class="dashboard-card-title">Carreras distintas</div>
+                <div class="dashboard-card-metric">10</div>
+            </div>
+        </div>
+    </div> -->
 
-    <!-- Modal de formulario de agregar estudiante -->
-    <div id="modal" class="modal hidden">
+    <div id="estudiantes-contenedor"></div>
+
+    <div id="modal-actualizar-estudiante" class="modal hidden">
         <div class="modal-contenido">
-            <span id="cerrar-modal" class="cerrar">&times;</span>
-            <h2>Agregar Estudiante</h2>
-            <form id="reserva-form">
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" required>
-
-                <label for="apellido">Apellido:</label>
-                <input type="text" id="apellido" name="apellido" required>
-
-                <label for="correo">Correo:</label>
-                <input type="email" id="correo" name="correo" required>
-
-                <label for="telefono">Teléfono:</label>
-                <input type="tel" id="telefono" name="telefono" required>
-
-                <label for="modalidad">Modalidad:</label>
-                <select id="modalidad" name="modalidad" required>
-                    <option value="" disabled selected>Seleccione una modalidad</option>
-                    <option value="Presencial">Presencial</option>
-                    <option value="Virtual">Virtual</option>
-                </select>
-
-                <label for="carrera">Carrera:</label>
-                <input type="text" id="carrera" name="carrera" required>
-
-                <button type="submit" class="btn-primario">Guardar</button>
+            <span id="cerrar-modal-actualizar-estudiante" class="cerrar">&times;</span>
+            <form id="form-actualizar-estudiante">
+                <h3>Actualizar Estudiante</h3>
+                <input type="hidden" id="actualizar-id-estudiante">
+                <label for="actualizar-nombre-estudiante">Nombre:</label>
+                <input type="text" id="actualizar-nombre-estudiante" required>
+                <label for="actualizar-apellido-estudiante">Apellido:</label>
+                <input type="text" id="actualizar-apellido-estudiante" required>
+                <label for="actualizar-dni-estudiante">DNI:</label>
+                <input type="text" id="actualizar-dni-estudiante" required>
+                <label for="actualizar-correo-estudiante">Correo electrónico:</label>
+                <input type="email" id="actualizar-correo-estudiante" required>
+                <label for="actualizar-telefono-estudiante">Teléfono:</label>
+                <input type="tel" id="actualizar-telefono-estudiante" required>
+                <label for="actualizar-fecha-nacimiento-estudiante">Fecha de nacimiento:</label>
+                <input type="date" id="actualizar-fecha-nacimiento-estudiante" required>
+                <!-- Si quieres permitir cambiar carrera, agrega el select aquí -->
+                <button type="submit" class="btn-primario">Guardar cambios</button>
             </form>
-            <button id="back-button" class="btn-back">Atrás</button>
         </div>
     </div>
+
 </body>
-<script src="../../js/index.js"></script>
+<script src="../../js/estudiantes.js"></script>
+
 </html>

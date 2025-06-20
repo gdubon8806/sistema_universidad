@@ -45,6 +45,9 @@ h2 {
     font-size: 0.83rem;
 }
 
+.navBar-contenedor h1 {
+    font-size: 1.5rem;
+}
 .navBar-contenedor .btn-primario {
     background-color: transparent;
 }

@@ -14,13 +14,16 @@
         <h1>Panel Administrativo Universitario</h1>
         <div class="menu-container">
             <a class="btn-primario" href="../">Inicio</a>
-            <a class="btn-primario" href="#">Matrículas</a>
+            <a class="btn-primario" href="../Matriculas/">Matrículas</a>
             <a class="btn-primario" href="../Estudiantes/">Estudiantes</a>
             <a class="btn-primario" href="../Profesores/">Profesores</a>
             <a class="btn-primario" href="../Admisiones/">Admisiones</a>
             <a class="btn-primario" href="../Carreras/">Carreras</a>
-            <a class="btn-primario" href="#">Cursos</a>
-            <a class="btn-primario" href="#">Secciones</a>
+            <a class="btn-primario" href="../Cursos">Cursos</a>
+            <a class="btn-primario" href="../Secciones">Secciones</a>
+            <a class="btn-primario" href="../Calificaciones/">Calificaciones</a>
+            <a class="btn-primario" href="../Aulas/">Aulas</a>
+
         </div>
     </div>
 
@@ -29,7 +32,7 @@
         <button class="btn-primario" id="abrir-modal">Nueva matrícula</button>
     </div>
 
-    <h2 class="dashboard-title">Dashboard de Matrículas</h2>
+    <!-- <h2 class="dashboard-title">Dashboard de Matrículas</h2>
     <div class="dashboard-cards">
         <div class="dashboard-card">
             <div class="dashboard-card-icon matriculas-general">📝</div>
@@ -59,132 +62,38 @@
                 <div class="dashboard-card-metric">160</div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <h3 class="table-title">Matrículas recientes</h3>
-    <table class="matriculas-table">
-        <thead>
-            <tr>
-                <th>ID Matrícula</th>
-                <th>Estudiante</th>
-                <th>Carrera</th>
-                <th>Materia</th>
-                <th>Fecha</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td data-label="ID Matrícula">3001</td>
-                <td data-label="Estudiante">Ana Pérez</td>
-                <td data-label="Carrera">Ingeniería Informática</td>
-                <td data-label="Materia">Programación I</td>
-                <td data-label="Fecha">2025-06-10</td>
-                <td data-label="Estado">Activa</td>
-                <td data-label="Acciones">
-                    <button class="btn-ver">Ver</button>
-                    <button class="btn-editar">Editar</button>
-                    <button class="btn-eliminar">Eliminar</button>
-                </td>
-            </tr>
-            <tr>
-                <td data-label="ID Matrícula">3002</td>
-                <td data-label="Estudiante">Carlos Gómez</td>
-                <td data-label="Carrera">Administración</td>
-                <td data-label="Materia">Contabilidad</td>
-                <td data-label="Fecha">2025-06-11</td>
-                <td data-label="Estado">Activa</td>
-                <td data-label="Acciones">
-                    <button class="btn-ver">Ver</button>
-                    <button class="btn-editar">Editar</button>
-                    <button class="btn-eliminar">Eliminar</button>
-                </td>
-            </tr>
-            <tr>
-                <td data-label="ID Matrícula">3003</td>
-                <td data-label="Estudiante">Lucía Torres</td>
-                <td data-label="Carrera">Derecho</td>
-                <td data-label="Materia">Derecho Civil</td>
-                <td data-label="Fecha">2025-06-12</td>
-                <td data-label="Estado">Pendiente</td>
-                <td data-label="Acciones">
-                    <button class="btn-ver">Ver</button>
-                    <button class="btn-editar">Editar</button>
-                    <button class="btn-eliminar">Eliminar</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
     <div id="matriculas-contenedor"></div>
-    <!-- Plantilla para tarjetas de reservas  -->
 
-    <template id="reserva-plantilla">
-        <div class="tarjeta">
-            <div class="tarjeta-img">
-                <img src="/img/habitacion.png" alt="Reserva">
-            </div>
-            <div class="tarjeta-contenido">
-                <h3 class="tarjeta-titulo"></h3>
-                <p class="tarjeta-nombre-cliente"></p>
-                <p class="tarjeta-fecha-inicio-reserva"></p>
-                <p class="tarjeta-fecha-salida-reserva"></p>
-                <p class="tarjeta-num-habitacion"></p>
-                <p class="tarjeta-piso"></p>
-                <p class="tarjeta-precio_total"></p>
-                <p class="tarjeta-estado"></p>
-                <button class="btn-eliminar" data-id="">Eliminar</button> <!-- Botón de eliminar -->
-            </div>
-        </div>
-    </template>
-
-    <!-- Modal de formulario de agregar matricula -->
-    <div id="modal" class="modal hidden">
+    <!-- Modal para agregar matrícula -->
+    <div id="modal-nueva-matricula" class="modal hidden">
         <div class="modal-contenido">
-            <span id="cerrar-modal" class="cerrar">&times;</span>
-            <h2>Matricular alumno</h2>
-            <form id="reserva-form">
-                <label for="nombre">Nombre del estudiante:</label>
-                <select id="nombre" name="nombre" required>
-                    <option value="" disabled selected>Seleccione un alumno</option>
-                    <!-- Las opciones se llenarán dinámicamente desde la base de datos -->
+            <span id="cerrar-modal-nueva-matricula" class="cerrar">&times;</span>
+            <form id="form-nueva-matricula">
+                <h3>Agregar Matrícula</h3>
+                <label for="fecha-matricula">Fecha de matrícula:</label>
+                <input type="date" id="fecha-matricula" name="fecha-matricula" required>
+
+                <label for="estudiante-matricula">Estudiante:</label>
+                <select id="estudiante-matricula" name="estudiante-matricula" required>
+                    <option value="">Seleccione un estudiante</option>
+                    <!-- Opciones se llenan dinámicamente -->
                 </select>
 
-                <label for="fecha-inicio">Fecha de Inicio:</label>
-                <input type="date" id="fecha-inicio" name="fecha-inicio" required>
-
-                <label for="fecha-salida">Fecha de Salida:</label>
-                <input type="date" id="fecha-salida" name="fecha-salida" required>
-
-                <label for="habitacion">Número de Habitación:</label>
-                <select id="habitacion" name="habitacion" required>
-                    <option value="" disabled selected>Seleccione una habitación</option>
-                    <!-- Las opciones se llenarán dinámicamente desde la base de datos -->
+                <label for="seccion-matricula">Sección:</label>
+                <select id="seccion-matricula" name="seccion-matricula" required>
+                    <option value="">Seleccione una sección</option>
+                    <!-- Opciones se llenan dinámicamente -->
                 </select>
 
-                <label for="numero-adultos">Número de Adultos:</label>
-                <input type="number" id="numero-adultos" name="numero_adultos" min="1" required>
-
-                <label for="numero-ninos">Número de Niños:</label>
-                <input type="number" id="numero-ninos" name="numero_ninos" min="0" required>
-
-                <label for="precio">Precio Total:</label>
-                <input type="number" id="precio" name="precio" readonly>
-
-                <label for="estado">Estado:</label>
-                <select id="estado" name="estado" required>
-                    <option value="confirmada">Confirmada</option>
-                    <option value="pendiente">Pendiente</option>
-                    <option value="cancelada">Cancelada</option>
-                </select>
-
-                <button type="submit">Aceptar</button>
+                <button type="submit" class="btn-primario">Agregar matrícula</button>
             </form>
-            <button id="back-button" class="btn-back">Atrás</button> <!-- Botón de Atrás -->
         </div>
     </div>
+
 </body>
-<script src="../../js/index.js"></script>
+<script src="../../js/matriculas.js"></script>
 
 </html>

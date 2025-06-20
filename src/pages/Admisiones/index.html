@@ -15,19 +15,20 @@
         <div class="menu-container">
             <a class="btn-primario" href="../">Inicio</a>
             <a class="btn-primario" href="../Matriculas/">Matrículas</a>
-            <a class="btn-primario" href="#">Estudiantes</a>
+            <a class="btn-primario" href="../Estudiantes/">Estudiantes</a>
             <a class="btn-primario" href="../Profesores/">Profesores</a>
-            <a class="btn-primario" href="#">Admisiones</a>
+            <a class="btn-primario" href="../Admisiones/">Admisiones</a>
             <a class="btn-primario" href="../Carreras/">Carreras</a>
-            <a class="btn-primario" href="#">Cursos</a>
-            <a class="btn-primario" href="#">Secciones</a>
+            <a class="btn-primario" href="../Cursos">Cursos</a>
+            <a class="btn-primario" href="../Secciones">Secciones</a>
+            <a class="btn-primario" href="../Calificaciones/">Calificaciones</a>
+            <a class="btn-primario" href="../Aulas/">Aulas</a>
         </div>
     </div>
     <div class="encabezado-contenedor">
         <h2>Admisiones</h2>
         <!-- Botón para abrir el modal -->
-        <!-- <button class="btn-primario" id="abrir-modal">Nueva admisión</button> -->
-        <button id="btn-nueva-admision">+ Nueva admisión</button>
+        <button id="openModal" class="btn-nueva-admision">+ Nueva admisión</button>
     </div>
 
     <h2 class="dashboard-title">Dashboard</h2>
@@ -78,86 +79,12 @@
 
     <!-- Tabla de admisiones -->
     <h3 class="table-title">Admisiones recientes</h3>
-    <table class="admisiones-table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Estudiante</th>
-                <th>Carrera</th>
-                <th>Fecha</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>2001</td>
-                <td>Ana Pérez</td>
-                <td>Ingeniería Informática</td>
-                <td>2025-06-15</td>
-                <td>Pendiente</td>
-                <td>
-                    <button class="btn-ver">Ver</button>
-                    <button class="btn-aceptar">Aceptar</button>
-                    <button class="btn-rechazar">Rechazar</button>
-                </td>
-            </tr>
-            <tr>
-                <td>2002</td>
-                <td>Carlos Gómez</td>
-                <td>Administración</td>
-                <td>2025-06-15</td>
-                <td>Pendiente</td>
-                <td>
-                    <button class="btn-ver">Ver</button>
-                    <button class="btn-aceptar">Aceptar</button>
-                    <button class="btn-rechazar">Rechazar</button>
-                </td>
-            </tr>
-            <tr>
-                <td>2003</td>
-                <td>Lucía Torres</td>
-                <td>Derecho</td>
-                <td>2025-06-14</td>
-                <td>Pendiente</td>
-                <td>
-                    <button class="btn-ver">Ver</button>
-                    <button class="btn-aceptar">Aceptar</button>
-                    <button class="btn-rechazar">Rechazar</button>
-                </td>
-            </tr>
-            <tr>
-                <td>2004</td>
-                <td>Juan Ruiz</td>
-                <td>Medicina</td>
-                <td>2025-06-13</td>
-                <td>Pendiente</td>
-                <td>
-                    <button class="btn-ver">Ver</button>
-                    <button class="btn-aceptar">Aceptar</button>
-                    <button class="btn-rechazar">Rechazar</button>
-                </td>
-            </tr>
-            <tr>
-                <td>2005</td>
-                <td>María López</td>
-                <td>Psicología</td>
-                <td>2025-06-12</td>
-                <td>Pendiente</td>
-                <td>
-                    <button class="btn-ver">Ver</button>
-                    <button class="btn-aceptar">Aceptar</button>
-                    <button class="btn-rechazar">Rechazar</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div id="tabla-admisiones-contenedor"></div>
 
     <!-- Modal para nueva admisión -->
-    <div id="modal-nueva-admision" class="modal-nueva-admision hidden">
-        <div class="modal-nueva-admision-content">
-            <span class="modal-nueva-admision-close" id="cerrar-modal-nueva-admision">&times;</span>
-            <h2>Nueva Admisión</h2>
+    <div id="modal-nueva-admision" class="modal hidden">
+        <div class="modal-contenido">
+            <span id="cerrar-modal-nueva-admision" class="cerrar">&times;</span>
             <form id="form-nueva-admision">
                 <h3>Datos de estudiante</h3>
                 <label for="nombre-alumno">Nombre:</label>
@@ -171,8 +98,7 @@
 
                 <label for="email-alumno">Correo electrónico:</label>
                 <input type="email" id="email-alumno" name="email-alumno" required>
-
-
+                
                 <label for="tel-alumno">Teléfono:</label>
                 <input type="tel" id="tel-alumno" name="tel-alumno" required>
 
@@ -182,97 +108,14 @@
                 <label for="carrera-alumno">Carrera a matricular:</label>
                 <select id="carrera-alumno" name="carrera-alumno" required>
                     <option value="">Seleccione una carrera</option>
-                    <option value="informatica">Ingeniería Informática</option>
-                    <option value="administracion">Administración</option>
-                    <option value="derecho">Derecho</option>
-                    <option value="medicina">Medicina</option>
-                    <option value="psicologia">Psicología</option>
+                    <!-- Opciones se llenan dinámicamente desde la base de datos -->
                 </select>
 
                 <button type="submit" class="btn-guardar-admision">Crear admisión</button>
             </form>
         </div>
     </div>
-
-    <div id="modal" class="modal hidden">
-        <div class="modal-contenido">
-            <span id="cerrar-modal" class="cerrar">&times;</span>
-            <h2>Matricular alumno</h2>
-            <form id="reserva-form">
-                <label for="nombre">Nombre del estudiante:</label>
-                <select id="nombre" name="nombre" required>
-                    <option value="" disabled selected>Seleccione un alumno</option>
-                    <!-- Las opciones se llenarán dinámicamente desde la base de datos -->
-                </select>
-
-                <label for="fecha-inicio">Fecha de Inicio:</label>
-                <input type="date" id="fecha-inicio" name="fecha-inicio" required>
-
-                <label for="fecha-salida">Fecha de Salida:</label>
-                <input type="date" id="fecha-salida" name="fecha-salida" required>
-
-                <label for="habitacion">Número de Habitación:</label>
-                <select id="habitacion" name="habitacion" required>
-                    <option value="" disabled selected>Seleccione una habitación</option>
-                    <!-- Las opciones se llenarán dinámicamente desde la base de datos -->
-                </select>
-
-                <label for="numero-adultos">Número de Adultos:</label>
-                <input type="number" id="numero-adultos" name="numero_adultos" min="1" required>
-
-                <label for="numero-ninos">Número de Niños:</label>
-                <input type="number" id="numero-ninos" name="numero_ninos" min="0" required>
-
-                <label for="precio">Precio Total:</label>
-                <input type="number" id="precio" name="precio" readonly>
-
-                <label for="estado">Estado:</label>
-                <select id="estado" name="estado" required>
-                    <option value="confirmada">Confirmada</option>
-                    <option value="pendiente">Pendiente</option>
-                    <option value="cancelada">Cancelada</option>
-                </select>
-
-                <button type="submit">Aceptar</button>
-            </form>
-            <button id="back-button" class="btn-back">Atrás</button> <!-- Botón de Atrás -->
-        </div>
-    </div>
-
-
-    <template id="reserva-plantilla">
-        <div class="tarjeta">
-            <div class="tarjeta-img">
-                <img src="/img/habitacion.png" alt="Reserva">
-            </div>
-            <div class="tarjeta-contenido">
-                <h3 class="tarjeta-titulo"></h3>
-                <p class="tarjeta-nombre-cliente"></p>
-                <p class="tarjeta-fecha-inicio-reserva"></p>
-                <p class="tarjeta-fecha-salida-reserva"></p>
-                <p class="tarjeta-num-habitacion"></p>
-                <p class="tarjeta-piso"></p>
-                <p class="tarjeta-precio_total"></p>
-                <p class="tarjeta-estado"></p>
-                <button class="btn-eliminar" data-id="">Eliminar</button> <!-- Botón de eliminar -->
-            </div>
-        </div>
-    </template>
-
 </body>
-<script src="../../js/index.js"></script>
-<script>
-    document.getElementById('btn-nueva-admision').onclick = function () {
-        document.getElementById('modal-nueva-admision').style.display = 'block';
-    };
-    document.getElementById('cerrar-modal-nueva-admision').onclick = function () {
-        document.getElementById('modal-nueva-admision').style.display = 'none';
-    };
-    window.onclick = function (event) {
-        if (event.target == document.getElementById('modal-nueva-admision')) {
-            document.getElementById('modal-nueva-admision').style.display = 'none';
-        }
-    };
-</script>
+<script defer src="../../js/admisiones.js"></script>
 
 </html>

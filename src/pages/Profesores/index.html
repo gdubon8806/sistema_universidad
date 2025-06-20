@@ -16,39 +16,73 @@
       <a class="btn-primario" href="../">Inicio</a>
       <a class="btn-primario" href="../Matriculas/">Matrículas</a>
       <a class="btn-primario" href="../Estudiantes/">Estudiantes</a>
-      <a class="btn-primario" href="#">Profesores</a>
+      <a class="btn-primario" href="../Profesores/">Profesores</a>
       <a class="btn-primario" href="../Admisiones/">Admisiones</a>
       <a class="btn-primario" href="../Carreras/">Carreras</a>
-      <a class="btn-primario" href="#">Cursos</a>
-      <a class="btn-primario" href="#">Secciones</a>
+      <a class="btn-primario" href="../Cursos">Cursos</a>
+      <a class="btn-primario" href="../Secciones">Secciones</a>
+      <a class="btn-primario" href="../Calificaciones/">Calificaciones</a>
+      <a class="btn-primario" href="../Aulas/">Aulas</a>
+
     </div>
   </div>
-  <h1>Gestión de Profesores</h1>
 
-  <form id="form-profesor">
-    <input type="text" id="nombre" placeholder="Nombre" required>
-    <input type="text" id="especialidad" placeholder="Especialidad" required>
-    <input type="text" id="disponibilidad" placeholder="Disponibilidad" required>
-    <button type="submit">Guardar</button>
-  </form>
+  <div class="encabezado-contenedor">
+    <h2>Gestión de Profesores</h2>
+    <!-- Botón para abrir el modal -->
+    <button id="openModalProfesor" class="btn-nueva-profesor">+ Nuevo Profesor</button>
+  </div>
+  <!-- Modal para agregar profesor -->
+  <div id="modal-nuevo-profesor" class="modal hidden">
+    <div class="modal-contenido">
+      <span id="cerrar-modal-nuevo-profesor" class="cerrar">&times;</span>
+      <form id="form-nuevo-profesor">
+        <h3>Agregar Profesor</h3>
+        <label for="nombre-profesor">Nombre:</label>
+        <input type="text" id="nombre-profesor" name="nombre-profesor" required>
 
-  <input type="text" id="filtro" placeholder="Filtrar por especialidad">
+        <label for="apellido-profesor">Apellido:</label>
+        <input type="text" id="apellido-profesor" name="apellido-profesor" required>
 
-  <table id="tabla-profesores">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Especialidad</th>
-        <th>Disponibilidad</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Aquí se agregan los profesores automáticamente -->
-    </tbody>
-  </table>
+        <label for="dni-profesor">DNI:</label>
+        <input type="text" id="dni-profesor" name="dni-profesor" required>
 
-  <script src="profesores.js"></script>
+        <label for="correo-profesor">Correo electrónico:</label>
+        <input type="email" id="correo-profesor" name="correo-profesor" required>
+
+        <label for="telefono-profesor">Teléfono:</label>
+        <input type="tel" id="telefono-profesor" name="telefono-profesor" required>
+
+        <button type="submit" class="btn-primario">Agregar profesor</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal para actualizar profesor -->
+  <div id="modal-actualizar-profesor" class="modal hidden">
+    <div class="modal-contenido">
+      <span id="cerrar-modal-actualizar-profesor" class="cerrar">&times;</span>
+      <form id="form-actualizar-profesor">
+        <h3>Actualizar Profesor</h3>
+        <input type="hidden" id="actualizar-id-profesor">
+        <label for="actualizar-nombre-profesor">Nombre:</label>
+        <input type="text" id="actualizar-nombre-profesor" required>
+        <label for="actualizar-apellido-profesor">Apellido:</label>
+        <input type="text" id="actualizar-apellido-profesor" required>
+        <label for="actualizar-dni-profesor">DNI:</label>
+        <input type="text" id="actualizar-dni-profesor" required>
+        <label for="actualizar-correo-profesor">Correo electrónico:</label>
+        <input type="email" id="actualizar-correo-profesor" required>
+        <label for="actualizar-telefono-profesor">Teléfono:</label>
+        <input type="tel" id="actualizar-telefono-profesor" required>
+        <button type="submit" class="btn-primario">Guardar cambios</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="tabla-profesores-contenedor"></div>
+
+  <script src="../../js/profesores.js"></script>
 </body>
 
 </html>

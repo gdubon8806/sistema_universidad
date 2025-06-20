@@ -15,134 +15,63 @@
         <div class="menu-container">
             <a class="btn-primario" href="../">Inicio</a>
             <a class="btn-primario" href="../Matriculas/">Matrículas</a>
-            <a class="btn-primario" href="#">Estudiantes</a>
+            <a class="btn-primario" href="../Estudiantes/">Estudiantes</a>
             <a class="btn-primario" href="../Profesores/">Profesores</a>
-            <a class="btn-primario" href="#">Admisiones</a>
-            <a class="btn-primario" href="#">Carreras</a>
-            <a class="btn-primario" href="#">Cursos</a>
-            <a class="btn-primario" href="#">Secciones</a>
+            <a class="btn-primario" href="../Admisiones/">Admisiones</a>
+            <a class="btn-primario" href="../Carreras/">Carreras</a>
+            <a class="btn-primario" href="../Cursos">Cursos</a>
+            <a class="btn-primario" href="../Secciones">Secciones</a>
+            <a class="btn-primario" href="../Calificaciones/">Calificaciones</a>
+            <a class="btn-primario" href="../Aulas/">Aulas</a>
+            
         </div>
     </div>
     <div class="encabezado-contenedor">
         <h2>Carreras</h2>
-        <!-- Botón para abrir el modal -->
-        <!-- <button class="btn-primario" id="abrir-modal">Nueva admisión</button> -->
-        <button id="btn-nueva-admision">+ Nueva carrera</button>
+        <button class="btn-primario" id="abrir-modal">Nueva Carrera</button>
     </div>
 
-    <!-- Tabla de admisiones -->
-    <h3 class="table-title">Listado de Carreras</h3>
-    <table class="carreras-table">
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Nombre</th>
-                <th>Modalidad</th>
-                <th>Estado</th>
-                <th>Duración</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td data-label="Código">INF</td>
-                <td data-label="Nombre">Ingeniería Informática</td>
-                <td data-label="Modalidad">Presencial</td>
-                <td data-label="Estado"><span class="estado-activa">Activa</span></td>
-                <td data-label="Duración">4 años</td>
-                <td data-label="Acciones">
-                    <button class="btn-editar" title="Editar">✏️ Editar</button>
-                    <button class="btn-inactivar" title="Inactivar">🗑️ Inactivar</button>
-                </td>
-            </tr>
-            <tr>
-                <td data-label="Código">ADM</td>
-                <td data-label="Nombre">Administración de Empresas</td>
-                <td data-label="Modalidad">Virtual</td>
-                <td data-label="Estado"><span class="estado-inactiva">Inactiva</span></td>
-                <td data-label="Duración">5 años</td>
-                <td data-label="Acciones">
-                    <button class="btn-editar" title="Editar">✏️ Editar</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div id="tabla-carreras-contenedor"></div>
+    
 
-    <!-- Modal para nueva carrera -->
-    <div id="modal-nueva-admision" class="modal-nueva-admision hidden">
-        <div class="modal-nueva-admision-content">
-            <span class="modal-nueva-admision-close" id="cerrar-modal-nueva-admision">&times;</span>
-            <h2>Nueva Admisión</h2>
-            <form id="form-nueva-admision">
-                <h3>Datos de estudiante</h3>
-                <label for="nombre-alumno">Nombre:</label>
-                <input type="text" id="nombre-alumno" name="nombre-alumno" required>
+    <!-- Modal de formulario de agregar carrera -->
+    <div id="modal" class="modal hidden">
+        <div class="modal-contenido">
+            <span id="cerrar-modal" class="cerrar">&times;</span>
+            <h2>Agregar nueva carrera</h2>
+            <form id="form-carrera">
+                <label for="codigo-carrera">Código de carrera:</label>
+                <input type="text" id="codigo-carrera" name="codigo-carrera" maxlength="10" required>
 
-                <label for="apellido-alumno">Apellido:</label>
-                <input type="text" id="apellido-alumno" name="apellido-alumno" required>
+                <label for="nombre-carrera">Nombre de carrera:</label>
+                <input type="text" id="nombre-carrera" name="nombre-carrera" maxlength="100" required>
 
-                <label for="dni-alumno">DNI:</label>
-                <input type="text" id="dni-alumno" name="dni-alumno" required>
-
-                <label for="email-alumno">Correo electrónico:</label>
-                <input type="email" id="email-alumno" name="email-alumno" required>
-
-
-                <label for="tel-alumno">Teléfono:</label>
-                <input type="tel" id="tel-alumno" name="tel-alumno" required>
-
-                <label for="fecha-nacimiento-alumno">Fecha de nacimiento:</label>
-                <input type="date" id="fecha-nacimiento-alumno" name="fecha-nacimiento-alumno" required>
-
-                <label for="carrera-alumno">Carrera a matricular:</label>
-                <select id="carrera-alumno" name="carrera-alumno" required>
-                    <option value="">Seleccione una carrera</option>
-                    <option value="informatica">Ingeniería Informática</option>
-                    <option value="administracion">Administración</option>
-                    <option value="derecho">Derecho</option>
-                    <option value="medicina">Medicina</option>
-                    <option value="psicologia">Psicología</option>
+                <label for="facultad-carrera">Facultad:</label>
+                <select id="facultad-carrera" name="facultad-carrera" required>
+                    <option value="" disabled selected>Seleccione una facultad</option>
+                    <!-- Las opciones se llenarán dinámicamente desde la base de datos -->
                 </select>
 
-                <button type="submit" class="btn-guardar-admision">Crear admisión</button>
+                <button type="submit" class="btn-primario">Agregar carrera</button>
             </form>
+            <button id="back-button" class="btn-back">Atrás</button>
         </div>
     </div>
 
-
-    <template id="reserva-plantilla">
-        <div class="tarjeta">
-            <div class="tarjeta-img">
-                <img src="/img/habitacion.png" alt="Reserva">
-            </div>
-            <div class="tarjeta-contenido">
-                <h3 class="tarjeta-titulo"></h3>
-                <p class="tarjeta-nombre-cliente"></p>
-                <p class="tarjeta-fecha-inicio-reserva"></p>
-                <p class="tarjeta-fecha-salida-reserva"></p>
-                <p class="tarjeta-num-habitacion"></p>
-                <p class="tarjeta-piso"></p>
-                <p class="tarjeta-precio_total"></p>
-                <p class="tarjeta-estado"></p>
-                <button class="btn-eliminar" data-id="">Eliminar</button> <!-- Botón de eliminar -->
-            </div>
-        </div>
-    </template>
-
 </body>
-<script src="../../js/index.js"></script>
+<script defer src="../../js/carreras.js"></script>
 <script>
-    document.getElementById('btn-nueva-admision').onclick = function () {
-        document.getElementById('modal-nueva-admision').style.display = 'block';
-    };
-    document.getElementById('cerrar-modal-nueva-admision').onclick = function () {
-        document.getElementById('modal-nueva-admision').style.display = 'none';
-    };
-    window.onclick = function (event) {
-        if (event.target == document.getElementById('modal-nueva-admision')) {
-            document.getElementById('modal-nueva-admision').style.display = 'none';
-        }
-    };
+    // document.getElementById('btn-nueva-admision').onclick = function () {
+    //     document.getElementById('modal-nueva-admision').style.display = 'block';
+    // };
+    // document.getElementById('cerrar-modal-nueva-admision').onclick = function () {
+    //     document.getElementById('modal-nueva-admision').style.display = 'none';
+    // };
+    // window.onclick = function (event) {
+    //     if (event.target == document.getElementById('modal-nueva-admision')) {
+    //         document.getElementById('modal-nueva-admision').style.display = 'none';
+    //     }
+    // };
 </script>
 
 </html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admisiones</title>
+    <link rel="stylesheet" href="../../styles/global.css">
+    <link rel="stylesheet" href="../../styles/secciones.css">
+</head>
+
+<body>
+    <div class="navBar-contenedor">
+        <h1>Panel Administrativo Universitario</h1>
+        <div class="menu-container">
+            <a class="btn-primario" href="../">Inicio</a>
+            <a class="btn-primario" href="../Matriculas/">Matrículas</a>
+            <a class="btn-primario" href="../Estudiantes/">Estudiantes</a>
+            <a class="btn-primario" href="../Profesores/">Profesores</a>
+            <a class="btn-primario" href="../Admisiones/">Admisiones</a>
+            <a class="btn-primario" href="../Carreras/">Carreras</a>
+            <a class="btn-primario" href="../Cursos">Cursos</a>
+            <a class="btn-primario" href="../Secciones">Secciones</a>
+            <a class="btn-primario" href="../Calificaciones/">Calificaciones</a>
+            <a class="btn-primario" href="../Aulas/">Aulas</a>
+        
+        </div>
+    </div>
+    <div class="encabezado-contenedor">
+        <h2>Secciones</h2>
+        <button class="btn-primario" id="abrir-modal">Nueva Seccion</button>
+    </div>
+
+    <div id="tabla-secciones-contenedor"></div>
+
+    <!-- Modal para agregar sección -->
+    <div id="modal-nueva-seccion" class="modal hidden">
+        <div class="modal-contenido">
+            <span id="cerrar-modal-nueva-seccion" class="cerrar">&times;</span>
+            <form id="form-nueva-seccion">
+                <h3>Agregar Sección</h3>
+
+                <label for="codigo-seccion">Código de sección:</label>
+                <input type="text" id="codigo-seccion" name="codigo-seccion" required>
+
+                <label for="curso-seccion">Curso:</label>
+                <select id="curso-seccion" name="curso-seccion" required>
+                    <option value="">Seleccione un curso</option>
+                    <!-- Opciones se llenan dinámicamente -->
+                </select>
+
+                <label for="modalidad-seccion">Modalidad:</label>
+                <select id="modalidad-seccion" name="modalidad-seccion" required>
+                    <option value="">Seleccione modalidad</option>
+                    <option value="Presencial">Presencial</option>
+                    <option value="Virtual">Virtual</option>
+                    <option value="Semi">Semi</option>
+                </select>
+
+                <label for="profesor-seccion">Profesor:</label>
+                <select id="profesor-seccion" name="profesor-seccion" required>
+                    <option value="">Seleccione un profesor</option>
+                    <!-- Opciones se llenan dinámicamente -->
+                </select>
+
+                <label for="aula-seccion">Aula:</label>
+                <select id="aula-seccion" name="aula-seccion" required>
+                    <option value="">Seleccione un aula</option>
+                    <!-- Opciones se llenan dinámicamente -->
+                </select>
+
+                <label for="hora-seccion">Hora:</label>
+                <input type="text" id="hora-seccion" name="hora-seccion" placeholder="Ej: 08:00 - 09:30" required>
+
+                <label for="dias-seccion">Días:</label>
+                <input type="text" id="dias-seccion" name="dias-seccion" placeholder="Ej: Lunes y Miércoles" required>
+
+                <label for="cupos-seccion">Cupos:</label>
+                <input type="number" id="cupos-seccion" name="cupos-seccion" min="1" required>
+
+                <button type="submit" class="btn-primario">Agregar sección</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+<script defer src="../../js/secciones.js"></script>
+
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admisiones</title>
+    <link rel="stylesheet" href="../../styles/global.css">
+    <link rel="stylesheet" href="../../styles/aulas.css">
+</head>
+
+<body>
+    <div class="navBar-contenedor">
+        <h1>Panel Administrativo Universitario</h1>
+        <div class="menu-container">
+            <a class="btn-primario" href="../">Inicio</a>
+            <a class="btn-primario" href="../Matriculas/">Matrículas</a>
+            <a class="btn-primario" href="../Estudiantes/">Estudiantes</a>
+            <a class="btn-primario" href="../Profesores/">Profesores</a>
+            <a class="btn-primario" href="../Admisiones/">Admisiones</a>
+            <a class="btn-primario" href="../Carreras/">Carreras</a>
+            <a class="btn-primario" href="../Cursos">Cursos</a>
+            <a class="btn-primario" href="../Secciones">Secciones</a>
+            <a class="btn-primario" href="../Calificaciones/">Calificaciones</a>
+            <a class="btn-primario" href="../Aulas/">Aulas</a>
+        </div>
+    </div>
+    <div class="encabezado-contenedor">
+        <h2>Aulas</h2>
+        <button class="btn-primario" id="abrir-modal">Nueva Aula</button>
+    </div>
+
+    <div id="tabla-aulas-contenedor"></div>
+
+    <!-- Modal para agregar aula -->
+    <div id="modal-nueva-aula" class="modal hidden">
+        <div class="modal-contenido">
+            <span id="cerrar-modal-nueva-aula" class="cerrar">&times;</span>
+            <form id="form-nueva-aula">
+                <h3>Agregar Aula</h3>
+                <label for="nombre-aula">Nombre del aula:</label>
+                <input type="text" id="nombre-aula" name="nombre-aula" required>
+
+                <label for="edificio-aula">Edificio:</label>
+                <select id="edificio-aula" name="edificio-aula" required>
+                    <option value="">Seleccione un edificio</option>
+                    <!-- Opciones se llenan dinámicamente -->
+                </select>
+
+                <button type="submit" class="btn-primario">Agregar aula</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+<script defer src="../../js/aulas.js"></script>
+
+</html>

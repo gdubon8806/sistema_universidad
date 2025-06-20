@@ -1,0 +1,139 @@
+.acciones-calificaciones {
+  margin: 24px 0 12px 0;
+  text-align: right;
+}
+
+.modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(25, 118, 210, 0.13);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-contenido {
+  background: #fff;
+  border-radius: 14px;
+  padding: 32px 28px 24px 28px;
+  max-width: 400px;
+  width: 95vw;
+  box-shadow: 0 8px 32px rgba(25, 118, 210, 0.13), 0 2px 8px rgba(0,0,0,0.10);
+  position: relative;
+}
+
+.cerrar {
+  position: absolute;
+  top: 14px;
+  right: 22px;
+  font-size: 2em;
+  color: #aaa;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.cerrar:hover {
+  color: #e53935;
+}
+
+#form-nueva-calificacion {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#form-nueva-calificacion label {
+  font-weight: 500;
+  color: #1976d2;
+  margin-bottom: 4px;
+}
+
+#form-nueva-calificacion input,
+#form-nueva-calificacion select {
+  padding: 10px 12px;
+  border: 1.5px solid #e3e8ee;
+  border-radius: 7px;
+  font-size: 1em;
+  background: #f7fafd;
+  transition: border 0.2s;
+  outline: none;
+}
+
+#form-nueva-calificacion input:focus,
+#form-nueva-calificacion select:focus {
+  border-color: #1976d2;
+  background: #fff;
+}
+
+.btn-primario {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
+  transition: background 0.2s, transform 0.15s;
+  margin-bottom: 18px;
+  margin-top: 8px;
+  letter-spacing: 0.5px;
+}
+
+.btn-primario:hover {
+  background: #125ea7;
+  transform: translateY(-2px) scale(1.03);
+}
+
+.calificaciones-table {
+  width: 100%;
+  max-width: 98vw;
+  margin: 30px auto 40px auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(25, 118, 210, 0.08), 0 1.5px 4px rgba(0,0,0,0.07);
+  overflow: hidden;
+  font-family: inherit;
+}
+
+.calificaciones-table thead {
+  background: #1976d2;
+  color: #fff;
+}
+
+.calificaciones-table th, .calificaciones-table td {
+  padding: 12px 14px;
+  text-align: left;
+}
+
+.calificaciones-table th {
+  font-size: 1.08em;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #1565c0;
+}
+
+.calificaciones-table tbody tr {
+  transition: background 0.18s;
+}
+
+.calificaciones-table tbody tr:nth-child(even) {
+  background: #f5f7fa;
+}
+
+.calificaciones-table tbody tr:hover {
+  background: #e3f0fc;
+}
+
+.calificaciones-table td {
+  color: #333;
+  font-size: 1em;
+  border-bottom: 1px solid #e3e8ee;
+}

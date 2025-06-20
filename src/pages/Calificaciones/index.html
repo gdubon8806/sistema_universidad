@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calificaciones</title>
+  <link rel="stylesheet" href="../../styles/global.css">
+  <link rel="stylesheet" href="../../styles/calificaciones.css">
+</head>
+
+<body>
+  <div class="navBar-contenedor">
+    <h1>Panel Administrativo Universitario</h1>
+    <div class="menu-container">
+      <a class="btn-primario" href="../index.html">Inicio</a>
+      <a class="btn-primario" href="../Matriculas/">Matrículas</a>
+      <a class="btn-primario" href="../Estudiantes/">Estudiantes</a>
+      <a class="btn-primario" href="../Profesores/">Profesores</a>
+      <a class="btn-primario" href="../Admisiones/">Admisiones</a>
+      <a class="btn-primario" href="../Carreras/">Carreras</a>
+      <a class="btn-primario" href="../Cursos/">Cursos</a>
+      <a class="btn-primario" href="../Secciones/">Secciones</a>
+      <a class="btn-primario" href="../Calificaciones/">Calificaciones</a>
+      <a class="btn-primario" href="../Aulas/">Aulas</a>
+
+    </div>
+  </div>
+
+  <div class="encabezado-contenedor">
+    <h2>Calificaciones</h2>
+    <button class="btn-primario" id="abrir-modal-calificacion">Nueva Calificación</button>
+
+  </div>
+  
+  <div id="calificaciones-contenedor"></div>
+
+  <!-- Modal para agregar calificación -->
+  <div id="modal-nueva-calificacion" class="modal hidden">
+    <div class="modal-contenido">
+      <span id="cerrar-modal-nueva-calificacion" class="cerrar">&times;</span>
+      <form id="form-nueva-calificacion">
+        <h3>Agregar Calificación</h3>
+        <label for="matricula-calificacion">Matrícula (Estudiante - Sección):</label>
+        <select id="matricula-calificacion" name="matricula-calificacion" required>
+          <option value="">Seleccione una matrícula</option>
+          <!-- Opciones se llenan dinámicamente -->
+        </select>
+
+        <label for="nota-calificacion">Nota:</label>
+        <input type="number" id="nota-calificacion" name="nota-calificacion" min="0" max="100" step="0.01" required>
+
+        <label for="fecha-calificacion">Fecha de registro:</label>
+        <input type="date" id="fecha-calificacion" name="fecha-calificacion">
+
+        <button type="submit" class="btn-primario">Agregar calificación</button>
+      </form>
+    </div>
+  </div>
+
+
+  <script src="../../js/calificaciones.js" defer></script>
+</body>
+
+</html>

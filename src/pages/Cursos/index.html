@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admisiones</title>
+    <link rel="stylesheet" href="../../styles/global.css">
+    <link rel="stylesheet" href="../../styles/cursos.css">
+</head>
+
+<body>
+    <div class="navBar-contenedor">
+        <h1>Panel Administrativo Universitario</h1>
+        <div class="menu-container">
+            <a class="btn-primario" href="../">Inicio</a>
+            <a class="btn-primario" href="../Matriculas/">Matrículas</a>
+            <a class="btn-primario" href="../Estudiantes/">Estudiantes</a>
+            <a class="btn-primario" href="../Profesores/">Profesores</a>
+            <a class="btn-primario" href="../Admisiones/">Admisiones</a>
+            <a class="btn-primario" href="../Carreras/">Carreras</a>
+            <a class="btn-primario" href="../Cursos">Cursos</a>
+            <a class="btn-primario" href="../Secciones">Secciones</a>
+            <a class="btn-primario" href="../Calificaciones/">Calificaciones</a>
+            <a class="btn-primario" href="../Aulas/">Aulas</a>
+
+        </div>
+    </div>
+    <div class="encabezado-contenedor">
+        <h2>Cursos</h2>
+        <button class="btn-primario" id="abrir-modal">Nuevo Curso</button>
+    </div>
+
+    <div id="tabla-cursos-contenedor"></div>
+
+    <!-- Modal para agregar curso -->
+    <div id="modal-nuevo-curso" class="modal hidden">
+        <div class="modal-contenido">
+            <span id="cerrar-modal-nuevo-curso" class="cerrar">&times;</span>
+            <form id="form-nuevo-curso">
+                <h3>Agregar Curso</h3>
+                <label for="codigo-curso">Código del curso:</label>
+                <input type="text" id="codigo-curso" name="codigo-curso" required>
+
+                <label for="nombre-curso">Nombre del curso:</label>
+                <input type="text" id="nombre-curso" name="nombre-curso" required>
+
+                <label for="creditos-curso">Créditos:</label>
+                <input type="number" id="creditos-curso" name="creditos-curso" min="1" required>
+
+                <label for="carrera-curso">Carrera:</label>
+                <select id="carrera-curso" name="carrera-curso" required>
+                    <option value="">Seleccione una carrera</option>
+                    <!-- Opciones se llenan dinámicamente -->
+                </select>
+
+                <label for="requisitos-curso">Requisitos (opcional):</label>
+                <textarea id="requisitos-curso" name="requisitos-curso" rows="2"></textarea>
+
+                <button type="submit" class="btn-primario">Agregar curso</button>
+            </form>
+        </div>
+    </div>
+
+
+</body>
+<script defer src="../../js/cursos.js"></script>
+
+</html>
