@@ -31,14 +31,6 @@
             <button type="button" class="btn-secundario" onclick="window.location.href='login.html'" style="margin-top:10px;width:100%;">Volver al inicio de sesión</button>
         </form>
     </div>
-    <script>
-        // Mostrar/ocultar contraseñas
-        document.getElementById('mostrarContrasena').addEventListener('change', function() {
-            const pass = document.getElementById('contrasena');
-            const confirm = document.getElementById('confirmarContrasena');
-            const tipo = this.checked ? 'text' : 'password';
-            pass.type = tipo;
-            confirm.type = tipo;
-        });
-    </script>
 </body>
+<script src="../../js/login.js"></script>
+</html>
