@@ -610,6 +610,26 @@ app.put("/profesores/:id", async (req, res) => {
   }
 });
 
+// Endpoint para login de usuario administrativo
+app.post("/login", async (req, res) => {
+  const { usuario, contrasena } = req.body;
+  try {
+    const pool = await obtenerConexionDB();
+    const result = await pool.request()
+      .input("usuario", usuario)
+      .input("password", contrasena)
+      .query(`SELECT * FROM Usuario WHERE Usuario = @usuario AND Password = @password`);
+    if (result.recordset.length === 1) {
+      // Usuario autenticado
+      res.json({ success: true, usuario: result.recordset[0].Usuario, nombre: result.recordset[0].Nombre });
+    } else {
+      res.status(401).json({ success: false, message: "Usuario o contraseña incorrectos" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Error en el servidor" });
+  }
+});
 
 const PORT = 3000;
 app.listen(PORT, () => {

@@ -131,3 +131,16 @@ CREATE TABLE CALIFICACION (
     Fecha_Registro DATE DEFAULT GETDATE(),
     FOREIGN KEY (ID_Matricula) REFERENCES MATRICULA(ID_Matricula)
 );
+GO
+
+-- Tabla para usuarios administrativos del sistema
+CREATE TABLE Usuario (
+    ID_Usuario INT PRIMARY KEY IDENTITY(1,1),
+    Usuario NVARCHAR(50) NOT NULL UNIQUE,
+    Password NVARCHAR(255) NOT NULL, -- Se recomienda almacenar hash
+    Nombre NVARCHAR(100) NOT NULL,
+    Apellido NVARCHAR(100) NOT NULL,
+    Rol NVARCHAR(50), -- Opcional: Ejemplo 'Administrador', 'Soporte', etc.
+    Fecha_Creacion DATETIME DEFAULT GETDATE() -- Fecha de creación del usuario
+);
+GO
