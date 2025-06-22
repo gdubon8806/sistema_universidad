@@ -67,8 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const hora = document.getElementById('hora-seccion').value.trim();
         const dias = document.getElementById('dias-seccion').value.trim();
         const cupos = document.getElementById('cupos-seccion').value;
+        const idPeriodo = document.getElementById('periodo-seccion').value; // <-- Nuevo
 
-        if (!codigo || !idCurso || !modalidad || !idProfesor || !idAula || !hora || !dias || !cupos) {
+        if (!codigo || !idCurso || !modalidad || !idProfesor || !idAula || !hora || !dias || !cupos || !idPeriodo) {
             alert('Por favor, completa todos los campos.');
             return;
         }
@@ -85,7 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     idAula,
                     hora,
                     dias,
-                    cupos
+                    cupos,
+                    idPeriodo // <-- Nuevo
                 })
             });
 
@@ -118,12 +120,12 @@ document.addEventListener('DOMContentLoaded', () => {
             tabla.innerHTML = `
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Código</th>
                         <th>Curso</th>
                         <th>Modalidad</th>
                         <th>Profesor</th>
                         <th>Aula</th>
+                        <th>Periodo Académico</th>
                         <th>Hora</th>
                         <th>Días</th>
                         <th>Cupos</th>
@@ -132,12 +134,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <tbody>
                     ${secciones.map(s => `
                         <tr>
-                            <td>${s.ID_Seccion}</td>
                             <td>${s.Codigo}</td>
                             <td>${s.Curso}</td>
                             <td>${s.Modalidad}</td>
                             <td>${s.Profesor}</td>
                             <td>${s.Aula}</td>
+                            <td>${s.PeriodoAcademico}</td>
                             <td>${s.Hora}</td>
                             <td>${s.Dias}</td>
                             <td>${s.Cupos}</td>
@@ -154,4 +156,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Llama la función al cargar la página
     renderizarTablaSecciones();
+
+    document.getElementById('abrir-modal').addEventListener('click', async function() {
+        document.getElementById('modal-nueva-seccion').classList.remove('hidden');
+
+        // Llenar select de periodos académicos
+        try {
+            const res = await fetch('http://localhost:3000/periodos-academicos');
+            const periodos = await res.json();
+            const select = document.getElementById('periodo-seccion');
+            select.innerHTML = '<option value="">Seleccione un periodo</option>';
+            periodos.forEach(p => {
+                const option = document.createElement('option');
+                option.value = p.ID_Periodo;
+                option.textContent = p.Nombre; // O el campo que uses para mostrar el periodo
+                select.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error al cargar periodos académicos:', error);
+        }
+
+        // ...aquí puedes llenar los otros selects dinámicos...
+    });
 });

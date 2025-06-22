@@ -163,3 +163,43 @@
   background: #125ea7;
   transform: translateY(-2px) scale(1.03);
 }
+
+#modal-cursos-carrera .modal-contenido {
+  background: #fff;
+  border-radius: 14px;
+  padding: 32px 28px 24px 28px;
+  max-width: 500px;
+  width: 95vw;
+  box-shadow: 0 8px 32px rgba(25, 118, 210, 0.13), 0 2px 8px rgba(0,0,0,0.10);
+  position: relative;
+}
+
+#modal-cursos-carrera .cerrar {
+  position: absolute;
+  top: 14px;
+  right: 22px;
+  font-size: 2em;
+  color: #aaa;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+#modal-cursos-carrera .cerrar:hover {
+  color: #e53935;
+}
+
+#lista-cursos-carrera {
+  margin-top: 18px;
+}
+
+#lista-cursos-carrera ul {
+  list-style: none;
+  padding: 0;
+}
+
+#lista-cursos-carrera li {
+  padding: 10px 0;
+  border-bottom: 1px solid #e3e8ee;
+  font-size: 1.08em;
+  color: #1976d2;
+}

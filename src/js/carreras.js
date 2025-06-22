@@ -46,46 +46,62 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function renderizarTablaCarreras() {
-    try {
-        const res = await fetch('http://localhost:3000/carreras');
-        const carreras = await res.json();
-        console.log(carreras);
-        const contenedor = document.getElementById('tabla-carreras-contenedor');
-        contenedor.innerHTML = ''; // Limpia el contenedor
+    const res = await fetch('http://localhost:3000/carreras');
+    const carreras = await res.json();
+    const contenedor = document.getElementById('tabla-carreras-contenedor');
+    contenedor.innerHTML = '';
 
-        let tabla = document.createElement('table');
-        tabla.id = 'tabla-carreras';
-        tabla.className = 'carreras-table';
-
-        // Encabezado
-        const thead = document.createElement('thead');
-        thead.innerHTML = `
+    const tabla = document.createElement('table');
+    tabla.className = 'carreras-table';
+    tabla.innerHTML = `
+        <thead>
             <tr>
-                <th>Código carrera</th>
-                <th>Nombre de carrera</th>
-                <th>Nombre de facultad</th>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Facultad</th>
             </tr>
-        `;
-        tabla.appendChild(thead);
+        </thead>
+        <tbody>
+            ${carreras.map(c => `
+                <tr class="fila-carrera" data-id="${c.ID_Carrera}" data-nombre="${c.nombre}">
+                    <td>${c.codigo}</td>
+                    <td>${c.nombre}</td>
+                    <td>${c.facultad}</td>
+                </tr>
+            `).join('')}
+        </tbody>
+    `;
+    contenedor.appendChild(tabla);
 
-        // Cuerpo
-        const tbody = document.createElement('tbody');
-        carreras.forEach(carrera => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${carrera.codigo}</td>
-                <td>${carrera.nombre}</td>
-                <td>${carrera.facultad}</td>
-            `;
-            tbody.appendChild(tr);
+    // Evento para abrir modal al hacer clic en una carrera
+    tabla.querySelectorAll('.fila-carrera').forEach(row => {
+        row.addEventListener('click', async function() {
+            const idCarrera = this.dataset.id;
+            const nombreCarrera = this.dataset.nombre;
+            document.getElementById('titulo-cursos-carrera').textContent = `Cursos de la carrera: ${nombreCarrera}`;
+            document.getElementById('modal-cursos-carrera').classList.remove('hidden');
+            // Cargar cursos asociados
+            const resCursos = await fetch(`http://localhost:3000/carreras/${idCarrera}/cursos`);
+            const cursos = await resCursos.json();
+            const lista = document.getElementById('lista-cursos-carrera');
+            if (cursos.length === 0) {
+                lista.innerHTML = "<p>No hay cursos asociados a esta carrera.</p>";
+            } else {
+                lista.innerHTML = `<ul>${cursos.map(c => `<li>${c.Codigo} - ${c.Nombre}</li>`).join('')}</ul>`;
+            }
         });
-        tabla.appendChild(tbody);
-
-        contenedor.appendChild(tabla);
-    } catch (error) {
-        console.error('Error al cargar las carreras:', error);
-    }
+    });
 }
+
+// Cerrar modal
+document.getElementById('cerrar-modal-cursos-carrera').onclick = function() {
+    document.getElementById('modal-cursos-carrera').classList.add('hidden');
+};
+window.addEventListener('click', function(e) {
+    if (e.target === document.getElementById('modal-cursos-carrera')) {
+        document.getElementById('modal-cursos-carrera').classList.add('hidden');
+    }
+});
 
 function agregarCarrera() {
     const form = document.getElementById('form-carrera');

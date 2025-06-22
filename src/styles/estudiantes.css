@@ -245,6 +245,31 @@
   transform: translateY(-2px) scale(1.03);
 }
 
+#modal-historial-estudiante .modal-contenido {
+  background: #fff;
+  border-radius: 14px;
+  padding: 32px 28px 24px 28px;
+  max-width: 900px;
+  width: 98vw;
+  box-shadow: 0 8px 32px rgba(25, 118, 210, 0.13), 0 2px 8px rgba(0,0,0,0.10);
+  position: relative;
+  overflow-x: auto;
+}
+#historial-estudiante-contenido table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+#historial-estudiante-contenido th, #historial-estudiante-contenido td {
+  border-bottom: 1px solid #e3e8ee;
+  padding: 8px 10px;
+  text-align: left;
+}
+#historial-estudiante-contenido th {
+  background: #f7fafd;
+  color: #1976d2;
+}
+
 @media (max-width: 900px) {
   .dashboard-cards { flex-direction: column; align-items: center; }
   .dashboard-card { width: 90%; max-width: 400px; }

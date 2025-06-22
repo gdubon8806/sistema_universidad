@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(fileURLToPath(import.meta.url)); 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 app.use(cors()); // Habilita CORS para permitir solicitudes del frontend
@@ -112,40 +112,18 @@ app.post("/admisiones", async (req, res) => {
     }
 
     const pool = await obtenerConexionDB();
-
-    // 1. Insertar estudiante (si no existe)
-    let result = await pool.request()
-      .input('dni', dni)
-      .query("SELECT ID_Estudiante FROM ESTUDIANTE WHERE DNI = @dni");
-
-    let idEstudiante;
-    if (result.recordset.length > 0) {
-      idEstudiante = result.recordset[0].ID_Estudiante;
-    } else {
-      let insertEst = await pool.request()
-        .input('nombres', nombre)
-        .input('apellidos', apellido)
-        .input('dni', dni)
-        .input('correo', correo)
-        .input('telefono', telefono)
-        .input('fechaNacimiento', fechaNacimiento)
-        .query(`
-          INSERT INTO ESTUDIANTE (Nombres, Apellidos, DNI, Correo_Electronico, Telefono, Fecha_Nacimiento)
-          OUTPUT INSERTED.ID_Estudiante
-          VALUES (@nombres, @apellidos, @dni, @correo, @telefono, @fechaNacimiento)
-        `);
-      idEstudiante = insertEst.recordset[0].ID_Estudiante;
-    }
-
-    // 2. Insertar admisión
     await pool.request()
-      .input('idEstudiante', idEstudiante)
-      .input('idCarrera', idCarrera)
-      .input('fechaIngreso', fechaIngreso)
-      .query(`
-        INSERT INTO ADMISIONES (ID_Estudiante, ID_Carrera, Fecha_Ingreso)
-        VALUES (@idEstudiante, @idCarrera, @fechaIngreso)
-      `);
+      .input('Nombres', nombre)
+      .input('Apellidos', apellido)
+      .input('DNI', dni)
+      .input('Correo', correo)
+      .input('Telefono', telefono)
+      .input('FechaNacimiento', fechaNacimiento)
+      .input('ID_Carrera', idCarrera)
+      .input('FechaIngreso', fechaIngreso)
+
+
+      .execute('sp_crear_admision');
 
     res.status(201).json({ message: "Admisión creada correctamente" });
   } catch (error) {
@@ -174,7 +152,7 @@ app.get("/profesores", async (req, res) => {
     res.status(500).json({ error: "Error al obtener los profesores" });
   }
 });
-  
+
 // Ruta para agregar un nuevo profesor
 app.post("/profesores", async (req, res) => {
   try {
@@ -205,35 +183,21 @@ app.post("/profesores", async (req, res) => {
 // Ruta para agregar un nuevo curso
 app.post("/cursos", async (req, res) => {
   try {
-    const { codigo, nombre, creditos, idCarrera, requisitos } = req.body;
-    if (!codigo || !nombre || !creditos || !idCarrera) {
+    const { codigo, nombre, creditos, requisitos } = req.body;
+    if (!codigo || !nombre || !creditos) {
       return res.status(400).json({ error: "Todos los campos obligatorios deben ser completados" });
     }
 
     const pool = await obtenerConexionDB();
 
-    // 1. Insertar el curso con el código
-    const resultCurso = await pool.request()
+    await pool.request()
       .input('codigo', codigo)
       .input('nombre', nombre)
       .input('creditos', creditos)
       .input('requisitos', requisitos || null)
       .query(`
         INSERT INTO CURSO (Codigo, Nombre, Creditos, Requisitos)
-        OUTPUT INSERTED.ID_Curso
         VALUES (@codigo, @nombre, @creditos, @requisitos)
-      `);
-
-    const idCurso = resultCurso.recordset[0].ID_Curso;
-
-    // 2. Asociar el curso a la carrera
-    await pool.request()
-      .input('idCurso', idCurso)
-      .input('idCarrera', idCarrera)
-      .input('requisitos', requisitos || null)
-      .query(`
-        INSERT INTO CURSOS_CARRERAS (ID_Curso, ID_Carrera, Requisitos)
-        VALUES (@idCurso, @idCarrera, @requisitos)
       `);
 
     res.status(201).json({ message: "Curso agregado correctamente" });
@@ -249,15 +213,12 @@ app.get("/cursos", async (req, res) => {
     const pool = await obtenerConexionDB();
     const result = await pool.request().query(`
       SELECT 
-        CU.ID_Curso,
-        CU.Codigo,
-        CU.Nombre,
-        CU.Creditos,
-        CA.Nombre AS Carrera,
-        CU.Requisitos
-      FROM CURSO CU
-      INNER JOIN CURSOS_CARRERAS CC ON CU.ID_Curso = CC.ID_Curso
-      INNER JOIN CARRERA CA ON CC.ID_Carrera = CA.ID_Carrera
+        ID_Curso,
+        Codigo,
+        Nombre,
+        Creditos,
+        Requisitos
+      FROM CURSO
     `);
     res.json(result.recordset);
   } catch (error) {
@@ -335,10 +296,11 @@ app.post("/secciones", async (req, res) => {
       idAula,
       hora,
       dias,
-      cupos
+      cupos,
+      idPeriodo // <-- Nuevo
     } = req.body;
 
-    if (!codigo || !idCurso || !modalidad || !idProfesor || !idAula || !hora || !dias || !cupos) {
+    if (!codigo || !idCurso || !modalidad || !idProfesor || !idAula || !hora || !dias || !cupos || !idPeriodo) {
       return res.status(400).json({ error: "Todos los campos son obligatorios" });
     }
 
@@ -352,9 +314,10 @@ app.post("/secciones", async (req, res) => {
       .input('hora', hora)
       .input('dias', dias)
       .input('cupos', cupos)
+      .input('idPeriodo', idPeriodo) // <-- Nuevo
       .query(`
-        INSERT INTO SECCION (Codigo, ID_Curso, Modalidad, ID_Profesor, ID_Aula, Hora, Dias, Cupos)
-        VALUES (@codigo, @idCurso, @modalidad, @idProfesor, @idAula, @hora, @dias, @cupos)
+        INSERT INTO SECCION (Codigo, ID_Curso, Modalidad, ID_Profesor, ID_Aula, Hora, Dias, Cupos, ID_Periodo)
+        VALUES (@codigo, @idCurso, @modalidad, @idProfesor, @idAula, @hora, @dias, @cupos, @idPeriodo)
       `);
 
     res.status(201).json({ message: "Sección agregada correctamente" });
@@ -370,12 +333,12 @@ app.get("/secciones", async (req, res) => {
     const pool = await obtenerConexionDB();
     const result = await pool.request().query(`
       SELECT 
-        S.ID_Seccion,
         S.Codigo,
         C.Nombre AS Curso,
         S.Modalidad,
         P.Nombre + ' ' + P.Apellido AS Profesor,
         A.Nombre_Aula AS Aula,
+        PA.Nombre AS PeriodoAcademico,
         S.Hora,
         S.Dias,
         S.Cupos
@@ -383,11 +346,30 @@ app.get("/secciones", async (req, res) => {
       INNER JOIN CURSO C ON S.ID_Curso = C.ID_Curso
       INNER JOIN PROFESOR P ON S.ID_Profesor = P.ID_Profesor
       INNER JOIN AULA A ON S.ID_Aula = A.ID_Aula
+      INNER JOIN PERIODO_ACADEMICO PA ON S.ID_Periodo = PA.ID_Periodo
     `);
     res.json(result.recordset);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al obtener las secciones" });
+  }
+});
+
+app.get("/secciones-disponibles", async (req, res) => {
+  try {
+    const { idEstudiante, idPeriodo } = req.query;
+    if (!idEstudiante || !idPeriodo) {
+      return res.status(400).json({ error: "Faltan parámetros requeridos" });
+    }
+    const pool = await obtenerConexionDB();
+    const result = await pool.request()
+      .input('ID_Estudiante', idEstudiante)
+      .input('ID_PeriodoActual', idPeriodo)
+      .execute('ObtenerSeccionesDisponibles');
+    res.json(result.recordset);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al obtener las secciones disponibles" });
   }
 });
 
@@ -504,7 +486,8 @@ app.get("/calificaciones", async (req, res) => {
         E.Nombres + ' ' + E.Apellidos AS Estudiante,
         E.DNI,
         S.Codigo AS Seccion,
-        CU.Nombre AS Curso
+        Cu.Nombre AS Curso,
+        C.Estado AS Estado
       FROM CALIFICACION C
       INNER JOIN MATRICULA M ON C.ID_Matricula = M.ID_Matricula
       INNER JOIN ESTUDIANTE E ON M.ID_Estudiante = E.ID_Estudiante
@@ -527,14 +510,18 @@ app.post("/calificaciones", async (req, res) => {
       return res.status(400).json({ error: "ID de matrícula y nota son obligatorios" });
     }
 
+    // Determinar estado
+    const estado = Number(nota) >= 65 ? 'Aprobado' : 'Reprobado';
+
     const pool = await obtenerConexionDB();
     await pool.request()
       .input('idMatricula', idMatricula)
       .input('nota', nota)
       .input('fecha', fecha || null)
+      .input('estado', estado)
       .query(`
-        INSERT INTO CALIFICACION (ID_Matricula, Nota, Fecha_Registro)
-        VALUES (@idMatricula, @nota, ISNULL(@fecha, GETDATE()))
+        INSERT INTO CALIFICACION (ID_Matricula, Nota, Fecha_Registro, Estado)
+        VALUES (@idMatricula, @nota, ISNULL(@fecha, GETDATE()), @estado)
       `);
 
     res.status(201).json({ message: "Calificación agregada correctamente" });
@@ -610,6 +597,95 @@ app.put("/profesores/:id", async (req, res) => {
   }
 });
 
+// Ruta para asociar un curso a una carrera
+app.post("/cursos-carreras", async (req, res) => {
+  try {
+    const { idCurso, idCarrera } = req.body;
+    if (!idCurso || !idCarrera) {
+      return res.status(400).json({ error: "Curso y carrera son obligatorios" });
+    }
+    const pool = await obtenerConexionDB();
+    await pool.request()
+      .input('idCurso', idCurso)
+      .input('idCarrera', idCarrera)
+      .query(`
+        INSERT INTO CURSOS_CARRERAS (ID_Curso, ID_Carrera)
+        VALUES (@idCurso, @idCarrera)
+      `);
+    res.status(201).json({ message: "Asociación creada correctamente" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al asociar curso y carrera" });
+  }
+});
+
+// Ruta para obtener los cursos de una carrera específica
+app.get("/carreras/:id/cursos", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pool = await obtenerConexionDB();
+    const result = await pool.request()
+      .input('idCarrera', id)
+      .query(`
+        SELECT C.ID_Curso, C.Codigo, C.Nombre
+        FROM CURSOS_CARRERAS CC
+        INNER JOIN CURSO C ON CC.ID_Curso = C.ID_Curso
+        WHERE CC.ID_Carrera = @idCarrera
+      `);
+    res.json(result.recordset);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al obtener los cursos de la carrera" });
+  }
+});
+
+app.get("/periodos-academicos", async (req, res) => {
+  try {
+    const pool = await obtenerConexionDB();
+    const result = await pool.request().query(`
+      SELECT ID_Periodo, Nombre FROM PERIODO_ACADEMICO
+    `);
+    res.json(result.recordset);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al obtener los periodos académicos" });
+  }
+});
+
+// Ruta para obtener el historial académico de un estudiante
+app.get("/estudiantes/:id/historial", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pool = await obtenerConexionDB();
+    const result = await pool.request()
+      .input('idEstudiante', id)
+      .query(`
+        SELECT 
+          E.Nombre_Edificio AS Edificio,
+          YEAR(CAL.Fecha_Registro) AS Anio,
+          PA.Nombre AS Periodo,
+          S.Codigo AS Seccion,
+          CU.Codigo AS CodigoClase,
+          CU.Nombre AS NombreClase,
+          CAL.Nota,
+          CAL.Estado,
+          CU.Creditos
+        FROM CALIFICACION CAL
+        INNER JOIN MATRICULA M ON CAL.ID_Matricula = M.ID_Matricula
+        INNER JOIN SECCION S ON M.ID_Seccion = S.ID_Seccion
+        INNER JOIN CURSO CU ON S.ID_Curso = CU.ID_Curso
+        INNER JOIN AULA AU ON S.ID_Aula = AU.ID_Aula
+        INNER JOIN EDIFICIO E ON AU.ID_Edificio = E.ID_Edificio
+        INNER JOIN PERIODO_ACADEMICO PA ON S.ID_Periodo = PA.ID_Periodo
+        WHERE M.ID_Estudiante = @idEstudiante
+        ORDER BY CAL.Fecha_Registro DESC
+      `);
+    res.json(result.recordset);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al obtener el historial académico" });
+  }
+});
 
 const PORT = 3000;
 app.listen(PORT, () => {

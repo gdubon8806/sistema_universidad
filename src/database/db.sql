@@ -131,3 +131,48 @@ CREATE TABLE CALIFICACION (
     Fecha_Registro DATE DEFAULT GETDATE(),
     FOREIGN KEY (ID_Matricula) REFERENCES MATRICULA(ID_Matricula)
 );
+
+
+
+CREATE TABLE PERIODO_ACADEMICO (
+    ID_Periodo INT PRIMARY KEY IDENTITY(1,1),
+    Nombre NVARCHAR(20) NOT NULL,         -- Ej: '2025-I', '2025-II'
+    Fecha_Inicio DATE NOT NULL,
+    Fecha_Fin DATE NOT NULL
+);
+
+-- Agregar columna ID_Periodo a la tabla SECCION
+ALTER TABLE SECCION
+ADD ID_Periodo INT;
+
+-- Crear la clave foránea
+ALTER TABLE SECCION
+ADD CONSTRAINT FK_Seccion_Periodo
+FOREIGN KEY (ID_Periodo) REFERENCES PERIODO_ACADEMICO(ID_Periodo);
+
+
+-- Agregar columna ID_Periodo a la tabla MATRICULA
+ALTER TABLE MATRICULA
+ADD ID_Periodo INT;
+
+-- Crear la clave foránea
+ALTER TABLE MATRICULA
+ADD CONSTRAINT FK_Matricula_Periodo
+FOREIGN KEY (ID_Periodo) REFERENCES PERIODO_ACADEMICO(ID_Periodo);
+
+
+
+CREATE TABLE PRERREQUISITO (
+    ID_Curso INT NOT NULL,                -- Ej: Programación II
+    ID_Curso_Prerequisito INT NOT NULL,  -- Ej: Programación I
+    PRIMARY KEY (ID_Curso, ID_Curso_Prerequisito),
+
+    FOREIGN KEY (ID_Curso) REFERENCES CURSO(ID_Curso),
+    FOREIGN KEY (ID_Curso_Prerequisito) REFERENCES CURSO(ID_Curso)
+);
+
+
+-- Agregar la columna Estado (puede ser NULL al principio si ya hay datos)
+ALTER TABLE CALIFICACIONES
+ADD Estado NVARCHAR(10);
+

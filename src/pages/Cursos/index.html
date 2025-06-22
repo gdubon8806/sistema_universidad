@@ -29,6 +29,7 @@
     <div class="encabezado-contenedor">
         <h2>Cursos</h2>
         <button class="btn-primario" id="abrir-modal">Nuevo Curso</button>
+        <button class="btn-primario" id="abrir-modal-asociar">Asociar Curso a Carrera</button>
     </div>
 
     <div id="tabla-cursos-contenedor"></div>
@@ -48,12 +49,6 @@
                 <label for="creditos-curso">Créditos:</label>
                 <input type="number" id="creditos-curso" name="creditos-curso" min="1" required>
 
-                <label for="carrera-curso">Carrera:</label>
-                <select id="carrera-curso" name="carrera-curso" required>
-                    <option value="">Seleccione una carrera</option>
-                    <!-- Opciones se llenan dinámicamente -->
-                </select>
-
                 <label for="requisitos-curso">Requisitos (opcional):</label>
                 <textarea id="requisitos-curso" name="requisitos-curso" rows="2"></textarea>
 
@@ -62,6 +57,24 @@
         </div>
     </div>
 
+    <!-- Modal para asociar curso a carrera -->
+    <div id="modal-asociar-curso-carrera" class="modal hidden">
+        <div class="modal-contenido">
+            <span id="cerrar-modal-asociar" class="cerrar">&times;</span>
+            <form id="form-asociar-curso-carrera">
+                <h3>Asociar Curso a Carrera</h3>
+                <label for="select-curso">Curso:</label>
+                <select id="select-curso" required>
+                    <option value="">Seleccione un curso</option>
+                </select>
+                <label for="carrera-curso">Carrera:</label>
+                <select id="carrera-curso" required>
+                    <option value="">Seleccione una carrera</option>
+                </select>
+                <button type="submit" class="btn-primario">Asociar</button>
+            </form>
+        </div>
+    </div>
 
 </body>
 <script defer src="../../js/cursos.js"></script>

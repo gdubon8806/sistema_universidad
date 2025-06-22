@@ -38,21 +38,23 @@
   color: #e53935;
 }
 
-#form-nuevo-curso {
+#form-nuevo-curso,
+#form-asociar-curso-carrera {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-#form-nuevo-curso label {
+#form-nuevo-curso label,
+#form-asociar-curso-carrera label {
   font-weight: 500;
   color: #1976d2;
   margin-bottom: 4px;
 }
 
 #form-nuevo-curso input,
-#form-nuevo-curso select,
-#form-nuevo-curso textarea {
+#form-nuevo-curso textarea,
+#form-asociar-curso-carrera select {
   padding: 10px 12px;
   border: 1.5px solid #e3e8ee;
   border-radius: 7px;
@@ -63,8 +65,8 @@
 }
 
 #form-nuevo-curso input:focus,
-#form-nuevo-curso select:focus,
-#form-nuevo-curso textarea:focus {
+#form-nuevo-curso textarea:focus,
+#form-asociar-curso-carrera select:focus {
   border-color: #1976d2;
   background: #fff;
 }
@@ -78,7 +80,7 @@
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
   transition: background 0.2s, transform 0.15s;
-  margin-bottom: 18px;
+  margin-bottom: 10px;
   margin-top: 8px;
   letter-spacing: 0.5px;
 }

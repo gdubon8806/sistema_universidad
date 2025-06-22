@@ -71,6 +71,7 @@ async function renderizarTablaCalificaciones() {
     try {
         const res = await fetch('http://localhost:3000/calificaciones');
         const calificaciones = await res.json();
+        console.log(calificaciones)
 
         const contenedor = document.getElementById('calificaciones-contenedor');
         contenedor.innerHTML = '';
@@ -87,6 +88,7 @@ async function renderizarTablaCalificaciones() {
                     <th>Curso</th>
                     <th>Sección</th>
                     <th>Nota</th>
+                    <th>Estado</th>
                     <th>Fecha</th>
                 </tr>
             </thead>
@@ -99,6 +101,7 @@ async function renderizarTablaCalificaciones() {
                         <td>${c.Curso}</td>
                         <td>${c.Seccion}</td>
                         <td>${c.Nota}</td>
+                        <td>${c.Estado}</td>
                         <td>${c.Fecha_Registro ? c.Fecha_Registro.split('T')[0] : ''}</td>
                     </tr>
                 `).join('')}

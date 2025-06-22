@@ -26,7 +26,7 @@ async function renderizarTablaEstudiantes() {
             </thead>
             <tbody>
                 ${estudiantes.map(e => `
-                    <tr>
+                    <tr data-id-estudiante="${e.ID_Estudiante}" data-nombre-estudiante="${e.Nombres}">
                         <td>${e.ID_Estudiante}</td>
                         <td>${e.Nombres}</td>
                         <td>${e.Apellidos}</td>
@@ -122,4 +122,71 @@ document.getElementById('form-actualizar-estudiante').addEventListener('submit',
         alert('Error al conectar con el servidor');
         console.error(error);
     }
+});
+
+// Evento para abrir historial al hacer clic en una fila
+document.addEventListener('DOMContentLoaded', () => {
+    // Delegación de evento para filas de estudiantes
+    document.getElementById('estudiantes-contenedor').addEventListener('click', async function(e) {
+        const fila = e.target.closest('tr[data-id-estudiante]');
+        if (fila) {
+            const idEstudiante = fila.getAttribute('data-id-estudiante');
+            const nombre = fila.getAttribute('data-nombre-estudiante');
+            document.getElementById('titulo-historial-estudiante').textContent = `Historial Académico de ${nombre}`;
+            document.getElementById('modal-historial-estudiante').classList.remove('hidden');
+            // Cargar historial
+            try {
+                const res = await fetch(`http://localhost:3000/estudiantes/${idEstudiante}/historial`);
+                const historial = await res.json();
+                if (!historial.length) {
+                    document.getElementById('historial-estudiante-contenido').innerHTML = "<p>No hay calificaciones registradas.</p>";
+                } else {
+                    document.getElementById('historial-estudiante-contenido').innerHTML = `
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Edificio</th>
+                                    <th>Año</th>
+                                    <th>Periodo</th>
+                                    <th>Sección</th>
+                                    <th>Código Clase</th>
+                                    <th>Nombre Clase</th>
+                                    <th>Nota</th>
+                                    <th>Estado</th>
+                                    <th>UV</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${historial.map(h => `
+                                    <tr>
+                                        <td>${h.Edificio || ''}</td>
+                                        <td>${h.Anio || ''}</td>
+                                        <td>${h.Periodo || ''}</td>
+                                        <td>${h.Seccion || ''}</td>
+                                        <td>${h.CodigoClase || ''}</td>
+                                        <td>${h.NombreClase || ''}</td>
+                                        <td>${h.Nota}</td>
+                                        <td>${h.Estado}</td>
+                                        <td>${h.Creditos}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('historial-estudiante-contenido').innerHTML = "<p>Error al cargar historial.</p>";
+            }
+        }
+    });
+
+    // Cerrar modal
+    document.getElementById('cerrar-modal-historial-estudiante').onclick = function() {
+        document.getElementById('modal-historial-estudiante').classList.add('hidden');
+    };
+    window.addEventListener('click', function(e) {
+        if (e.target === document.getElementById('modal-historial-estudiante')) {
+            document.getElementById('modal-historial-estudiante').classList.add('hidden');
+        }
+    });
 });

@@ -125,3 +125,48 @@ async function renderizarTablaMatriculas() {
 
 // Llama la función al cargar la página
 document.addEventListener('DOMContentLoaded', renderizarTablaMatriculas);
+
+async function llenarSelectSecciones() {
+    const idEstudiante = document.getElementById('estudiante-matricula').value;
+    const idPeriodo = document.getElementById('periodo-matricula').value;
+    if (!idEstudiante || !idPeriodo) return;
+
+    try {
+        const res = await fetch(`http://localhost:3000/secciones-disponibles?idEstudiante=${idEstudiante}&idPeriodo=${idPeriodo}`);
+        const secciones = await res.json();
+        const select = document.getElementById('seccion-matricula');
+        select.innerHTML = '<option value="">Seleccione una sección</option>';
+        secciones.forEach(s => {
+            // Usa s.Nombre_Curso en vez de s.Curso
+            select.innerHTML += `<option value="${s.ID_Seccion}">${s.Codigo} - ${s.Modalidad} - ${s.Hora} (${s.Nombre_Curso})</option>`;
+        });
+    } catch (error) {
+        console.error('Error al cargar secciones disponibles:', error);
+    }
+}
+
+// Llama a esta función cuando cambie el estudiante o el periodo
+document.getElementById('estudiante-matricula').addEventListener('change', llenarSelectSecciones);
+document.getElementById('periodo-matricula').addEventListener('change', llenarSelectSecciones);
+
+document.getElementById('abrir-modal').addEventListener('click', async function() {
+    document.getElementById('modal-nueva-matricula').classList.remove('hidden');
+
+    // Llenar select de periodos académicos
+    try {
+        const res = await fetch('http://localhost:3000/periodos-academicos');
+        const periodos = await res.json();
+        const select = document.getElementById('periodo-matricula');
+        select.innerHTML = '<option value="">Seleccione un periodo</option>';
+        periodos.forEach(p => {
+            const option = document.createElement('option');
+            option.value = p.ID_Periodo;
+            option.textContent = p.Nombre; // O el campo que uses para mostrar el periodo
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error al cargar periodos académicos:', error);
+    }
+
+    // ...aquí puedes llenar los otros selects dinámicos...
+});
