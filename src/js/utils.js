@@ -31,3 +31,13 @@ function formatearFecha(fechaString) {
         return null;
     }
 }
+
+/**
+ * Verifica si el usuario está logueado.
+ * Si no lo está, lo redirige a la página de acceso denegado.
+ */
+function protegerRuta() {
+    if (localStorage.getItem('usuarioLogueado') !== 'true') {
+        window.location.href = '../../pages/Login/accesoDenegado.html';
+    }
+}

@@ -1,6 +1,16 @@
-// filepath: c:\Users\germa\OneDrive\Escritorio\sistema_universidad\src\js\secciones.js
 document.addEventListener('DOMContentLoaded', () => {
-    // Abrir y cerrar modal
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
+// filepath: c:\Users\germa\OneDrive\Escritorio\sistema_universidad\src\js\secciones.js
+
     const openBtn = document.getElementById('abrir-modal');
     const modal = document.getElementById('modal-nueva-seccion');
     const closeBtn = document.getElementById('cerrar-modal-nueva-seccion');

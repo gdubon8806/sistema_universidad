@@ -1,4 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
+    
     const abrirModalBtn = document.getElementById('abrir-modal');
     const modal = document.getElementById('modal');
     const cerrarModalBtn = document.getElementById('cerrar-modal');
