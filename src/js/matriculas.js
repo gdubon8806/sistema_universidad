@@ -12,44 +12,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Llenar select de estudiantes
-    fetch('http://localhost:3000/estudiantes')
-        .then(res => res.json())
-        .then(estudiantes => {
-            const select = document.getElementById('estudiante-matricula');
-            select.innerHTML = '<option value="">Seleccione un estudiante</option>';
-            estudiantes.forEach(e => {
-                const option = document.createElement('option');
-                option.value = e.ID_Estudiante;
-                option.textContent = `${e.Nombres} ${e.Apellidos} (${e.DNI})`;
-                select.appendChild(option);
-            });
-        });
 
-    // Llenar select de secciones
-    fetch('http://localhost:3000/secciones')
-        .then(res => res.json())
-        .then(secciones => {
-            const select = document.getElementById('seccion-matricula');
-            select.innerHTML = '<option value="">Seleccione una sección</option>';
-            secciones.forEach(s => {
-                const option = document.createElement('option');
-                option.value = s.ID_Seccion;
-                option.textContent = `${s.Codigo} - ${s.Curso}`;
-                select.appendChild(option);
-            });
-        });
 
     // Enviar formulario para agregar matrícula
     document.getElementById('form-nueva-matricula').addEventListener('submit', async function(e) {
         e.preventDefault();
 
         const fecha = document.getElementById('fecha-matricula').value;
-        const idEstudiante = document.getElementById('estudiante-matricula').value;
-        const idSeccion = document.getElementById('seccion-matricula').value;
-
-        if (!fecha || !idEstudiante || !idSeccion) {
+        if (!fecha || !estudianteSeleccionado || !periodoActivo) {
             alert('Por favor, completa todos los campos.');
+            return;
+        }
+
+        // Recolectar secciones seleccionadas
+        const seccionesSeleccionadas = [];
+        document.querySelectorAll('#cursos-disponibles-contenedor select').forEach(select => {
+            if (select.value) {
+                seccionesSeleccionadas.push(select.value);
+            }
+        });
+
+        if (seccionesSeleccionadas.length === 0) {
+            alert('Debes seleccionar al menos una sección.');
             return;
         }
 
@@ -59,16 +43,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     fecha,
-                    idEstudiante,
-                    idSeccion
+                    idEstudiante: estudianteSeleccionado,
+                    idPeriodo: periodoActivo.ID_Periodo,
+                    secciones: seccionesSeleccionadas
                 })
             });
 
             if (res.ok) {
                 alert('Matrícula agregada correctamente');
-                modal.classList.add('hidden');
+                document.getElementById('modal-nueva-matricula').classList.add('hidden');
                 this.reset();
-                // Si tienes función para recargar la tabla, llama aquí
                 renderizarTablaMatriculas();
             } else {
                 const data = await res.json();
@@ -126,47 +110,118 @@ async function renderizarTablaMatriculas() {
 // Llama la función al cargar la página
 document.addEventListener('DOMContentLoaded', renderizarTablaMatriculas);
 
-async function llenarSelectSecciones() {
-    const idEstudiante = document.getElementById('estudiante-matricula').value;
-    const idPeriodo = document.getElementById('periodo-matricula').value;
-    if (!idEstudiante || !idPeriodo) return;
+// async function llenarSelectSecciones(idEstudiante, idPeriodo) {
+//     if (!idEstudiante || !idPeriodo) return;
+//     try {
+//         const res = await fetch(`http://localhost:3000/secciones-disponibles?idEstudiante=${idEstudiante}&idPeriodo=${idPeriodo}`);
+//         const secciones = await res.json();
+//         const select = document.getElementById('seccion-matricula');
+//         select.innerHTML = '<option value="">Seleccione una sección</option>';
+//         secciones.forEach(s => {
+//             select.innerHTML += `<option value="${s.ID_Seccion}">${s.Codigo} - ${s.Modalidad} - ${s.Hora} (${s.Nombre_Curso})</option>`;
+//         });
+//     } catch (error) {
+//         console.error('Error al cargar secciones disponibles:', error);
+//     }
+// }
 
+
+document.getElementById('abrir-modal').addEventListener('click', async function() {
+    document.getElementById('modal-seleccionar-estudiante').classList.remove('hidden');
+    // Llenar selector de estudiantes
+    const select = document.getElementById('selector-estudiante-matricula');
+    select.innerHTML = '<option value="">Seleccione un estudiante</option>';
+    const res = await fetch('http://localhost:3000/estudiantes');
+    const estudiantes = await res.json();
+    estudiantes.forEach(e => {
+        const option = document.createElement('option');
+        option.value = e.ID_Estudiante;
+        option.textContent = `${e.Nombres} ${e.Apellidos} (${e.DNI})`;
+        select.appendChild(option);
+    });
+    document.getElementById('mensaje-matricula-existe').textContent = '';
+    document.getElementById('continuar-matricula').disabled = true;
+});
+
+// Cerrar modales
+document.getElementById('cerrar-modal-seleccionar-estudiante').onclick = function() {
+    document.getElementById('modal-seleccionar-estudiante').classList.add('hidden');
+};
+document.getElementById('cerrar-modal-nueva-matricula').onclick = function() {
+    document.getElementById('modal-nueva-matricula').classList.add('hidden');
+};
+
+// Verificar matrícula al seleccionar estudiante
+document.getElementById('selector-estudiante-matricula').addEventListener('change', async function() {
+    const idEstudiante = this.value;
+    const mensaje = document.getElementById('mensaje-matricula-existe');
+    const btnContinuar = document.getElementById('continuar-matricula');
+    mensaje.textContent = '';
+    btnContinuar.disabled = true;
+    if (idEstudiante) {
+        const res = await fetch(`http://localhost:3000/matricula-existe?idEstudiante=${idEstudiante}`);
+        const data = await res.json(); 
+        console.log(data);
+        if (data.existe) {
+            mensaje.textContent = 'Ya matriculó este periodo.';
+        } else {
+            mensaje.textContent = '';
+            btnContinuar.disabled = false;
+        }
+    }
+});
+
+// Al dar continuar, abrir el modal de matrícula
+document.getElementById('continuar-matricula').addEventListener('click', async function() {
+    const idEstudiante = document.getElementById('selector-estudiante-matricula').value;
+    if (!idEstudiante) return;
+    estudianteSeleccionado = idEstudiante;
+    console.log('Estudiante seleccionado:', estudianteSeleccionado);
+
+    // Obtener periodo académico activo
+    const res = await fetch('http://localhost:3000/periodo-academico-activo');
+    const periodo = await res.json();
+    periodoActivo = periodo;
+
+    document.getElementById('modal-seleccionar-estudiante').classList.add('hidden');
+    document.getElementById('modal-nueva-matricula').classList.remove('hidden');
+    document.getElementById('encabezado-matricula').textContent = `Matrícula de periodo académico "${periodo.Nombre}"`;
+
+    // Llenar secciones disponibles para este estudiante y periodo
+    // llenarSelectSecciones(estudianteSeleccionado, periodoActivo.ID_Periodo);
+    mostrarCursosYSecciones(estudianteSeleccionado, periodoActivo.ID_Periodo);
+});
+
+async function mostrarCursosYSecciones(idEstudiante, idPeriodo) {
+    const contenedor = document.getElementById('cursos-disponibles-contenedor');
+    contenedor.innerHTML = '<p>Cargando cursos...</p>';
     try {
-        const res = await fetch(`http://localhost:3000/secciones-disponibles?idEstudiante=${idEstudiante}&idPeriodo=${idPeriodo}`);
-        const secciones = await res.json();
-        const select = document.getElementById('seccion-matricula');
-        select.innerHTML = '<option value="">Seleccione una sección</option>';
-        secciones.forEach(s => {
-            // Usa s.Nombre_Curso en vez de s.Curso
-            select.innerHTML += `<option value="${s.ID_Seccion}">${s.Codigo} - ${s.Modalidad} - ${s.Hora} (${s.Nombre_Curso})</option>`;
+        const res = await fetch(`http://localhost:3000/cursos-disponibles-con-secciones?idEstudiante=${idEstudiante}&idPeriodo=${idPeriodo}`);
+        const cursos = await res.json();
+        if (!cursos.length) {
+            contenedor.innerHTML = '<p>No hay cursos disponibles para matricular en este periodo.</p>';
+            return;
+        }
+        contenedor.innerHTML = '';
+        cursos.forEach(curso => {
+            const div = document.createElement('div');
+            div.className = 'curso-matricula-item';
+            div.innerHTML = `
+                <label><strong>${curso.Codigo} - ${curso.Nombre}</strong></label>
+                <select name="seccion-curso-${curso.ID_Curso}" data-id-curso="${curso.ID_Curso}">
+                    <option value="">Seleccione una sección</option>
+                    ${curso.secciones.map(s => `
+                        <option value="${s.ID_Seccion}">${s.Codigo} - ${s.Modalidad} - ${s.Hora}</option>
+                    `).join('')}
+                </select>
+            `;
+            contenedor.appendChild(div);
         });
     } catch (error) {
-        console.error('Error al cargar secciones disponibles:', error);
+        contenedor.innerHTML = '<p>Error al cargar cursos disponibles.</p>';
+        console.error(error);
     }
 }
 
-// Llama a esta función cuando cambie el estudiante o el periodo
-document.getElementById('estudiante-matricula').addEventListener('change', llenarSelectSecciones);
-document.getElementById('periodo-matricula').addEventListener('change', llenarSelectSecciones);
-
-document.getElementById('abrir-modal').addEventListener('click', async function() {
-    document.getElementById('modal-nueva-matricula').classList.remove('hidden');
-
-    // Llenar select de periodos académicos
-    try {
-        const res = await fetch('http://localhost:3000/periodos-academicos');
-        const periodos = await res.json();
-        const select = document.getElementById('periodo-matricula');
-        select.innerHTML = '<option value="">Seleccione un periodo</option>';
-        periodos.forEach(p => {
-            const option = document.createElement('option');
-            option.value = p.ID_Periodo;
-            option.textContent = p.Nombre; // O el campo que uses para mostrar el periodo
-            select.appendChild(option);
-        });
-    } catch (error) {
-        console.error('Error al cargar periodos académicos:', error);
-    }
-
-    // ...aquí puedes llenar los otros selects dinámicos...
-});
+let estudianteSeleccionado = null;
+let periodoActivo = null;

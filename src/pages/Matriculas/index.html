@@ -71,31 +71,29 @@
     <div id="modal-nueva-matricula" class="modal hidden">
         <div class="modal-contenido">
             <span id="cerrar-modal-nueva-matricula" class="cerrar">&times;</span>
+            <h3 id="encabezado-matricula">Matrícula</h3>
             <form id="form-nueva-matricula">
-                <h3>Agregar Matrícula</h3>
                 <label for="fecha-matricula">Fecha de matrícula:</label>
                 <input type="date" id="fecha-matricula" name="fecha-matricula" required>
 
-                <label for="estudiante-matricula">Estudiante:</label>
-                <select id="estudiante-matricula" name="estudiante-matricula" required>
-                    <option value="">Seleccione un estudiante</option>
-                    <!-- Opciones se llenan dinámicamente -->
-                </select>
-
-                <label for="periodo-matricula">Periodo Académico:</label>
-                <select id="periodo-matricula" name="periodo-matricula" required>
-                    <option value="">Seleccione un periodo</option>
-                    <!-- Opciones se llenan dinámicamente -->
-                </select>
-
-                <label for="seccion-matricula">Sección:</label>
-                <select id="seccion-matricula" name="seccion-matricula" required>
-                    <option value="">Seleccione una sección</option>
-                    <!-- Opciones se llenan dinámicamente -->
-                </select>
+                <div id="cursos-disponibles-contenedor"></div>
 
                 <button type="submit" class="btn-primario">Agregar matrícula</button>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal 1: Seleccionar estudiante -->
+    <div id="modal-seleccionar-estudiante" class="modal hidden">
+        <div class="modal-contenido">
+            <span id="cerrar-modal-seleccionar-estudiante" class="cerrar">&times;</span>
+            <h3>Seleccionar estudiante para matrícula</h3>
+            <select id="selector-estudiante-matricula">
+                <option value="">Seleccione un estudiante</option>
+                <!-- Opciones dinámicas -->
+            </select>
+            <div id="mensaje-matricula-existe" style="color:red;margin:10px 0;"></div>
+            <button id="continuar-matricula" class="btn-primario" disabled>Continuar</button>
         </div>
     </div>
 
