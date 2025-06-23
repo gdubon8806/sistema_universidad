@@ -703,7 +703,131 @@ app.get("/estudiantes/:id/historial", async (req, res) => {
   }
 });
 
+// Ruta para obtener el periodo académico activo
+app.get("/periodo-academico-activo", async (req, res) => {
+  try {
+    const pool = await obtenerConexionDB();
+    const result = await pool.request().query(`
+      SELECT TOP 1 ID_Periodo, Nombre FROM PERIODO_ACADEMICO WHERE Activo = 1
+    `);
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ error: "No hay periodo académico activo" });
+    }
+    res.json(result.recordset[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al obtener el periodo académico activo" });
+  }
+});
 
+app.get("/matricula-existe", async (req, res) => {
+  try {
+    const { idEstudiante } = req.query;
+    if (!idEstudiante) {
+      return res.status(400).json({ error: "Falta el parámetro idEstudiante" });
+    }
+    const pool = await obtenerConexionDB();
+
+    // 1. Obtener el periodo académico activo
+    const periodoResult = await pool.request().query(`
+      SELECT TOP 1 ID_Periodo FROM PERIODO_ACADEMICO WHERE Activo = 1
+    `);
+    if (periodoResult.recordset.length === 0) {
+      return res.status(404).json({ error: "No hay periodo académico activo" });
+    }
+    const idPeriodo = periodoResult.recordset[0].ID_Periodo;
+
+    // 2. Verificar si el estudiante ya tiene matrícula en ese periodo
+    const result = await pool.request()
+      .input('idEstudiante', idEstudiante)
+      .input('idPeriodo', idPeriodo)
+      .query(`
+        SELECT COUNT(*) AS total
+        FROM MATRICULA M
+        INNER JOIN SECCION S ON M.ID_Seccion = S.ID_Seccion
+        WHERE M.ID_Estudiante = @idEstudiante AND S.ID_Periodo = @idPeriodo
+      `);
+
+    res.json({ existe: result.recordset[0].total > 0, idPeriodo });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al verificar matrícula" });
+  }
+});
+
+app.get("/cursos-disponibles-con-secciones", async (req, res) => {
+  try {
+    const { idEstudiante, idPeriodo } = req.query;
+    if (!idEstudiante || !idPeriodo) {
+      return res.status(400).json({ error: "Faltan parámetros requeridos" });
+    }
+    const pool = await obtenerConexionDB();
+
+    // 1. Obtener la carrera del estudiante
+    const carreraResult = await pool.request()
+      .input('idEstudiante', idEstudiante)
+      .query(`SELECT ID_Carrera FROM ADMISIONES WHERE ID_Estudiante = @idEstudiante`);
+    if (!carreraResult.recordset.length) {
+      return res.status(404).json({ error: "Estudiante no encontrado" });
+    }
+    const idCarrera = carreraResult.recordset[0].ID_Carrera;
+
+    // 2. Cursos que puede llevar el estudiante (según prerrequisitos, no aprobados y asociados a su carrera)
+    const cursosResult = await pool.request()
+      .input('idEstudiante', idEstudiante)
+      .input('idPeriodo', idPeriodo)
+      .input('idCarrera', idCarrera)
+      .query(`
+        SELECT C.ID_Curso, C.Codigo, C.Nombre, C.Creditos
+        FROM CURSO C
+        INNER JOIN CURSOS_CARRERAS CC ON CC.ID_Curso = C.ID_Curso
+        WHERE 
+          CC.ID_Carrera = @idCarrera
+          AND C.ID_Curso NOT IN (
+            SELECT SC.ID_Curso
+            FROM CALIFICACION CAL
+            JOIN MATRICULA M ON CAL.ID_Matricula = M.ID_Matricula
+            JOIN SECCION SC ON SC.ID_Seccion = M.ID_Seccion
+            WHERE M.ID_Estudiante = @idEstudiante
+              AND CAL.Estado = 'Aprobado'
+          )
+          AND NOT EXISTS (
+            SELECT 1
+            FROM PRERREQUISITO PR
+            WHERE PR.ID_Curso = C.ID_Curso
+              AND NOT EXISTS (
+                SELECT 1
+                FROM CALIFICACION CAL
+                JOIN MATRICULA M ON CAL.ID_Matricula = M.ID_Matricula
+                JOIN SECCION SC ON SC.ID_Seccion = M.ID_Seccion
+                WHERE M.ID_Estudiante = @idEstudiante
+                  AND CAL.Estado = 'Aprobado'
+                  AND SC.ID_Curso = PR.ID_Curso_Prerequisito
+              )
+          )
+      `);
+
+    const cursos = cursosResult.recordset;
+
+    // 3. Para cada curso, obtener secciones abiertas en el periodo activo
+    for (const curso of cursos) {
+      const seccionesResult = await pool.request()
+        .input('idCurso', curso.ID_Curso)
+        .input('idPeriodo', idPeriodo)
+        .query(`
+          SELECT S.ID_Seccion, S.Codigo, S.Modalidad, S.Hora
+          FROM SECCION S
+          WHERE S.ID_Curso = @idCurso AND S.ID_Periodo = @idPeriodo
+        `);
+      curso.secciones = seccionesResult.recordset;
+    }
+
+    res.json(cursos);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al obtener cursos y secciones disponibles" });
+  }
+});
 
 
 const PORT = 3000;
