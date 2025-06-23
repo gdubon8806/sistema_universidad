@@ -1,4 +1,16 @@
-// Ejemplo de función para renderizar la tabla de admisiones
+document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
+});
+
 async function renderizarTablaAdmisiones() {
     try {
         const res = await fetch('http://localhost:3000/admisiones');

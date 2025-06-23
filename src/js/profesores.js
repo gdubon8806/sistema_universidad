@@ -1,6 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
-    renderizarTablaProfesores();
+    protegerRuta();
 
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    
+    renderizarTablaProfesores();
+}
     // Abrir y cerrar modal para nuevo profesor
     const openBtn = document.getElementById('openModalProfesor');
     const modal = document.getElementById('modal-nuevo-profesor');

@@ -1,3 +1,18 @@
+document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
+
+    renderizarTablaEstudiantes();
+});
+
 async function renderizarTablaEstudiantes() {
     try {
         const res = await fetch('http://localhost:3000/estudiantes');
