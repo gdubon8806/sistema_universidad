@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (cerrarSesionBtn) {
         cerrarSesionBtn.addEventListener('click', () => {
             localStorage.clear();
-            window.location.href = '../../pages/Login/index.html';
+            window.location.href = '../pages/Login/index.html';
         });
     }
     

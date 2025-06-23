@@ -38,6 +38,6 @@ function formatearFecha(fechaString) {
  */
 function protegerRuta() {
     if (localStorage.getItem('usuarioLogueado') !== 'true') {
-        window.location.href = '../../pages/Login/accesoDenegado.html';
+        window.location.href = '../Login/accesoDenegado.html';
     }
 }
