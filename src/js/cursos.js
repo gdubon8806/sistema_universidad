@@ -1,4 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
+
     // Abrir y cerrar modal
     const openBtn = document.getElementById('abrir-modal');
     const modal = document.getElementById('modal-nuevo-curso');
@@ -12,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Llenar select de carreras dinámicamente
+    // Llenar select de carreras
     fetch('http://localhost:3000/carreras')
         .then(res => res.json())
         .then(carreras => {
@@ -29,8 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error al cargar carreras:', err);
         });
 
-    // Enviar formulario para agregar curso
-    document.getElementById('form-nuevo-curso').addEventListener('submit', async function(e) {
+    // Enviar formulario
+    document.getElementById('form-nuevo-curso').addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const codigo = document.getElementById('codigo-curso').value.trim();
@@ -72,49 +83,48 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Función para renderizar la tabla de cursos
-    async function renderizarTablaCursos() {
-        try {
-            const res = await fetch('http://localhost:3000/cursos');
-            const cursos = await res.json();
-
-            const contenedor = document.getElementById('tabla-cursos-contenedor');
-            contenedor.innerHTML = '';
-
-            const tabla = document.createElement('table');
-            tabla.className = 'cursos-table';
-
-            tabla.innerHTML = `
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Código</th>
-                        <th>Nombre del curso</th>
-                        <th>Créditos</th>
-                        <th>Carrera</th>
-                        <th>Requisitos</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${cursos.map(c => `
-                        <tr>
-                            <td>${c.ID_Curso}</td>
-                            <td>${c.Codigo}</td>
-                            <td>${c.Nombre}</td>
-                            <td>${c.Creditos}</td>
-                            <td>${c.Carrera}</td>
-                            <td>${c.Requisitos || ''}</td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            `;
-
-            contenedor.appendChild(tabla);
-        } catch (error) {
-            console.error('Error al cargar cursos:', error);
-        }
-    }
-
-    // Llama la función al cargar la página
+    // Renderizar cursos
     renderizarTablaCursos();
 });
+
+async function renderizarTablaCursos() {
+    try {
+        const res = await fetch('http://localhost:3000/cursos');
+        const cursos = await res.json();
+
+        const contenedor = document.getElementById('tabla-cursos-contenedor');
+        contenedor.innerHTML = '';
+
+        const tabla = document.createElement('table');
+        tabla.className = 'cursos-table';
+
+        tabla.innerHTML = `
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Código</th>
+                    <th>Nombre del curso</th>
+                    <th>Créditos</th>
+                    <th>Carrera</th>
+                    <th>Requisitos</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${cursos.map(c => `
+                    <tr>
+                        <td>${c.ID_Curso}</td>
+                        <td>${c.Codigo}</td>
+                        <td>${c.Nombre}</td>
+                        <td>${c.Creditos}</td>
+                        <td>${c.Carrera}</td>
+                        <td>${c.Requisitos || ''}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        `;
+
+        contenedor.appendChild(tabla);
+    } catch (error) {
+        console.error('Error al cargar cursos:', error);
+    }
+}

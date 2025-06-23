@@ -1,45 +1,15 @@
-// Ejemplo de función para renderizar la tabla de admisiones
-async function renderizarTablaAdmisiones() {
-    try {
-        const res = await fetch('http://localhost:3000/admisiones');
-        const admisiones = await res.json();
-
-        const contenedor = document.getElementById('tabla-admisiones-contenedor');
-        contenedor.innerHTML = '';
-
-        let tabla = document.createElement('table');
-        tabla.className = 'admisiones-table';
-
-        // Encabezado
-        tabla.innerHTML = `
-            <thead>
-                <tr>
-                    <th>Nombre de estudiante</th>
-                    <th>Carrera</th>
-                    <th>Fecha de ingreso</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${admisiones.map(a => `
-                    <tr>
-                        <td>${a.estudiante}</td>
-                        <td>${a.carrera}</td>
-                        <td>${new Date(a.fecha_ingreso).toLocaleDateString()}</td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        `;
-
-        contenedor.appendChild(tabla);
-    } catch (error) {
-        console.error('Error al cargar las admisiones:', error);
-    }
-}
-
-// Llama la función al cargar la página
-renderizarTablaAdmisiones();
-
 document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
+
     // Abrir y cerrar modal
     const openBtn = document.getElementById('openModal');
     const modal = document.getElementById('modal-nueva-admision');
@@ -60,9 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const select = document.getElementById('carrera-alumno');
             select.innerHTML = '<option value="">Seleccione una carrera</option>';
             carreras.forEach(carrera => {
-                // Usa SIEMPRE el ID numérico
                 const option = document.createElement('option');
-                option.value = carrera.ID_Carrera || carrera.idCarrera; // <-- SOLO el ID numérico
+                option.value = carrera.ID_Carrera || carrera.idCarrera;
                 option.textContent = carrera.nombre || carrera.Nombre;
                 select.appendChild(option);
             });
@@ -72,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     // Enviar formulario de admisión
-    document.getElementById('form-nueva-admision').addEventListener('submit', async function(e) {
+    document.getElementById('form-nueva-admision').addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const nombre = document.getElementById('nombre-alumno').value.trim();
@@ -82,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const telefono = document.getElementById('tel-alumno').value.trim();
         const fechaNacimiento = document.getElementById('fecha-nacimiento-alumno').value;
         const idCarrera = document.getElementById('carrera-alumno').value;
-        const fechaIngreso = new Date().toISOString().split('T')[0]; // Fecha actual
+        const fechaIngreso = new Date().toISOString().split('T')[0];
 
         if (!nombre || !apellido || !dni || !correo || !fechaNacimiento || !idCarrera) {
             alert('Por favor, completa todos los campos obligatorios.');
@@ -109,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Admisión creada correctamente');
                 modal.classList.add('hidden');
                 this.reset();
-                // Si tienes función para recargar la tabla, llama aquí
                 renderizarTablaAdmisiones();
             } else {
                 const data = await res.json();
@@ -120,4 +88,43 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(error);
         }
     });
+
+    // Renderizar tabla al cargar
+    renderizarTablaAdmisiones();
 });
+
+async function renderizarTablaAdmisiones() {
+    try {
+        const res = await fetch('http://localhost:3000/admisiones');
+        const admisiones = await res.json();
+
+        const contenedor = document.getElementById('tabla-admisiones-contenedor');
+        contenedor.innerHTML = '';
+
+        let tabla = document.createElement('table');
+        tabla.className = 'admisiones-table';
+
+        tabla.innerHTML = `
+            <thead>
+                <tr>
+                    <th>Nombre de estudiante</th>
+                    <th>Carrera</th>
+                    <th>Fecha de ingreso</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${admisiones.map(a => `
+                    <tr>
+                        <td>${a.estudiante}</td>
+                        <td>${a.carrera}</td>
+                        <td>${formatearFecha(a.fecha_ingreso)}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        `;
+
+        contenedor.appendChild(tabla);
+    } catch (error) {
+        console.error('Error al cargar las admisiones:', error);
+    }
+}

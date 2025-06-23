@@ -1,5 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Abrir y cerrar modal
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
+
+    // 🪟 Modal
     const openBtn = document.getElementById('abrir-modal');
     const modal = document.getElementById('modal-nueva-matricula');
     const closeBtn = document.getElementById('cerrar-modal-nueva-matricula');
@@ -12,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Llenar select de estudiantes
+    // 📥 Llenar estudiantes
     fetch('http://localhost:3000/estudiantes')
         .then(res => res.json())
         .then(estudiantes => {
@@ -26,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-    // Llenar select de secciones
+    // 📥 Llenar secciones
     fetch('http://localhost:3000/secciones')
         .then(res => res.json())
         .then(secciones => {
@@ -40,8 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-    // Enviar formulario para agregar matrícula
-    document.getElementById('form-nueva-matricula').addEventListener('submit', async function(e) {
+    // ➕ Enviar matrícula
+    document.getElementById('form-nueva-matricula').addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const fecha = document.getElementById('fecha-matricula').value;
@@ -57,18 +68,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch('http://localhost:3000/matriculas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    fecha,
-                    idEstudiante,
-                    idSeccion
-                })
+                body: JSON.stringify({ fecha, idEstudiante, idSeccion })
             });
 
             if (res.ok) {
                 alert('Matrícula agregada correctamente');
                 modal.classList.add('hidden');
                 this.reset();
-                // Si tienes función para recargar la tabla, llama aquí
                 renderizarTablaMatriculas();
             } else {
                 const data = await res.json();
@@ -79,6 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(error);
         }
     });
+
+    renderizarTablaMatriculas();
 });
 
 async function renderizarTablaMatriculas() {
@@ -107,7 +115,7 @@ async function renderizarTablaMatriculas() {
                 ${matriculas.map(m => `
                     <tr>
                         <td>${m.ID_Matricula}</td>
-                        <td>${m.Fecha_Matricula ? m.Fecha_Matricula.split('T')[0] : ''}</td>
+                        <td>${formatearFecha(m.Fecha_Matricula)}</td>
                         <td>${m.Estudiante}</td>
                         <td>${m.DNI}</td>
                         <td>${m.Seccion}</td>
@@ -122,6 +130,3 @@ async function renderizarTablaMatriculas() {
         console.error('Error al cargar matrículas:', error);
     }
 }
-
-// Llama la función al cargar la página
-document.addEventListener('DOMContentLoaded', renderizarTablaMatriculas);

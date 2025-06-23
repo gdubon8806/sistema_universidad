@@ -1,4 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
+
     const abrirModalBtn = document.getElementById('abrir-modal');
     const modal = document.getElementById('modal');
     const cerrarModalBtn = document.getElementById('cerrar-modal');
@@ -31,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(res => res.json())
         .then(facultades => {
             const select = document.getElementById('facultad-carrera');
-            // Limpia las opciones excepto la primera
             select.innerHTML = '<option value="" disabled selected>Seleccione una facultad</option>';
             facultades.forEach(facultad => {
                 const option = document.createElement('option');
@@ -43,6 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(err => {
             console.error('Error al cargar facultades:', err);
         });
+
+    agregarCarrera();
+    renderizarTablaCarreras();
 });
 
 async function renderizarTablaCarreras() {
@@ -50,14 +63,14 @@ async function renderizarTablaCarreras() {
         const res = await fetch('http://localhost:3000/carreras');
         const carreras = await res.json();
         console.log(carreras);
+
         const contenedor = document.getElementById('tabla-carreras-contenedor');
-        contenedor.innerHTML = ''; // Limpia el contenedor
+        contenedor.innerHTML = '';
 
         let tabla = document.createElement('table');
         tabla.id = 'tabla-carreras';
         tabla.className = 'carreras-table';
 
-        // Encabezado
         const thead = document.createElement('thead');
         thead.innerHTML = `
             <tr>
@@ -68,7 +81,6 @@ async function renderizarTablaCarreras() {
         `;
         tabla.appendChild(thead);
 
-        // Cuerpo
         const tbody = document.createElement('tbody');
         carreras.forEach(carrera => {
             const tr = document.createElement('tr');
@@ -79,8 +91,8 @@ async function renderizarTablaCarreras() {
             `;
             tbody.appendChild(tr);
         });
-        tabla.appendChild(tbody);
 
+        tabla.appendChild(tbody);
         contenedor.appendChild(tabla);
     } catch (error) {
         console.error('Error al cargar las carreras:', error);
@@ -89,7 +101,7 @@ async function renderizarTablaCarreras() {
 
 function agregarCarrera() {
     const form = document.getElementById('form-carrera');
-    form.addEventListener('submit', async function(e) {
+    form.addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const codigo = document.getElementById('codigo-carrera').value.trim();
@@ -129,8 +141,3 @@ function agregarCarrera() {
         }
     });
 }
-
-// Llama la función para activar el submit del formulario
-agregarCarrera();
-
-renderizarTablaCarreras();

@@ -1,7 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
+
     renderizarTablaProfesores();
 
-    // Abrir y cerrar modal para nuevo profesor
+    // Modal nuevo profesor
     const openBtn = document.getElementById('openModalProfesor');
     const modal = document.getElementById('modal-nuevo-profesor');
     const closeBtn = document.getElementById('cerrar-modal-nuevo-profesor');
@@ -14,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Enviar formulario para agregar profesor
+    // Agregar profesor
     document.getElementById('form-nuevo-profesor').addEventListener('submit', async function(e) {
         e.preventDefault();
 
@@ -33,13 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch('http://localhost:3000/profesores', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    nombre,
-                    apellido,
-                    dni,
-                    correo,
-                    telefono
-                })
+                body: JSON.stringify({ nombre, apellido, dni, correo, telefono })
             });
 
             if (res.ok) {
@@ -58,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Función para renderizar la tabla de profesores
+// Renderizar tabla
 async function renderizarTablaProfesores() {
     try {
         const res = await fetch('http://localhost:3000/profesores');
@@ -113,7 +118,7 @@ async function renderizarTablaProfesores() {
     }
 }
 
-// Abrir modal y llenar datos para actualizar
+// Abrir modal actualizar
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('btn-actualizar-profesor')) {
         const btn = e.target;
@@ -127,10 +132,11 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Cerrar modal de actualizar
-document.getElementById('cerrar-modal-actualizar-profesor').onclick = function() {
+// Cerrar modal actualizar
+document.getElementById('cerrar-modal-actualizar-profesor').onclick = () => {
     document.getElementById('modal-actualizar-profesor').classList.add('hidden');
 };
+
 window.addEventListener('click', function(e) {
     if (e.target === document.getElementById('modal-actualizar-profesor')) {
         document.getElementById('modal-actualizar-profesor').classList.add('hidden');
@@ -140,6 +146,7 @@ window.addEventListener('click', function(e) {
 // Enviar actualización
 document.getElementById('form-actualizar-profesor').addEventListener('submit', async function(e) {
     e.preventDefault();
+
     const id = document.getElementById('actualizar-id-profesor').value;
     const nombre = document.getElementById('actualizar-nombre-profesor').value.trim();
     const apellido = document.getElementById('actualizar-apellido-profesor').value.trim();
@@ -151,14 +158,9 @@ document.getElementById('form-actualizar-profesor').addEventListener('submit', a
         const res = await fetch(`http://localhost:3000/profesores/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                nombre,
-                apellido,
-                dni,
-                correo,
-                telefono
-            })
+            body: JSON.stringify({ nombre, apellido, dni, correo, telefono })
         });
+
         if (res.ok) {
             alert('Profesor actualizado correctamente');
             document.getElementById('modal-actualizar-profesor').classList.add('hidden');

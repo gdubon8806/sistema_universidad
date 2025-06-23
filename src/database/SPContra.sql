@@ -1,4 +1,4 @@
--- Procedimiento para insertar usuario con contraseña encriptada (clave fija)
+-- Procedimiento para insertar usuario con contraseña encriptada
 CREATE PROCEDURE InsertarUsuarioEncriptado
     @Usuario NVARCHAR(50),
     @Password NVARCHAR(100),
@@ -19,7 +19,7 @@ BEGIN
 END
 GO
 
--- Procedimiento para validar login desencriptando la contraseña (clave fija)
+-- Procedimiento para validar login desencriptando la contraseña
 CREATE PROCEDURE ValidarLogin
     @Usuario NVARCHAR(50),
     @Password NVARCHAR(100)

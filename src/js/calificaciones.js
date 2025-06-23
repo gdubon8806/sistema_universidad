@@ -1,4 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
+
     // Abrir y cerrar modal
     const openBtn = document.getElementById('abrir-modal-calificacion');
     const modal = document.getElementById('modal-nueva-calificacion');
@@ -12,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Llenar select de matrículas (estudiante + sección)
+    // Llenar select de matrículas
     fetch('http://localhost:3000/matriculas')
         .then(res => res.json())
         .then(matriculas => {
@@ -27,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     // Enviar formulario para agregar calificación
-    document.getElementById('form-nueva-calificacion').addEventListener('submit', async function(e) {
+    document.getElementById('form-nueva-calificacion').addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const idMatricula = document.getElementById('matricula-calificacion').value;
@@ -43,18 +54,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch('http://localhost:3000/calificaciones', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    idMatricula,
-                    nota,
-                    fecha
-                })
+                body: JSON.stringify({ idMatricula, nota, fecha })
             });
 
             if (res.ok) {
                 alert('Calificación agregada correctamente');
                 modal.classList.add('hidden');
                 this.reset();
-                // Si tienes función para recargar la tabla, llama aquí
                 renderizarTablaCalificaciones();
             } else {
                 const data = await res.json();
@@ -65,6 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(error);
         }
     });
+
+    // Renderizar tabla al cargar
+    renderizarTablaCalificaciones();
 });
 
 async function renderizarTablaCalificaciones() {
@@ -110,6 +119,3 @@ async function renderizarTablaCalificaciones() {
         console.error('Error al cargar calificaciones:', error);
     }
 }
-
-// Llama la función al cargar la página
-document.addEventListener('DOMContentLoaded', renderizarTablaCalificaciones);

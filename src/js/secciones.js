@@ -1,5 +1,15 @@
-// filepath: c:\Users\germa\OneDrive\Escritorio\sistema_universidad\src\js\secciones.js
 document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
+
     // Abrir y cerrar modal
     const openBtn = document.getElementById('abrir-modal');
     const modal = document.getElementById('modal-nueva-seccion');
@@ -13,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Llenar select de cursos
+    // Llenar selects dinámicamente
     fetch('http://localhost:3000/cursos')
         .then(res => res.json())
         .then(cursos => {
@@ -27,7 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-    // Llenar select de profesores
     fetch('http://localhost:3000/profesores')
         .then(res => res.json())
         .then(profesores => {
@@ -41,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-    // Llenar select de aulas
     fetch('http://localhost:3000/aulas')
         .then(res => res.json())
         .then(aulas => {
@@ -55,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-    // Enviar formulario para agregar sección
+    // Enviar formulario
     document.getElementById('form-nueva-seccion').addEventListener('submit', async function(e) {
         e.preventDefault();
 
@@ -104,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Renderizar tabla
     async function renderizarTablaSecciones() {
         try {
             const res = await fetch('http://localhost:3000/secciones');
@@ -152,6 +161,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Llama la función al cargar la página
     renderizarTablaSecciones();
 });

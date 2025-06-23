@@ -1,4 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
+
     // Abrir y cerrar modal
     const openBtn = document.getElementById('abrir-modal');
     const modal = document.getElementById('modal-nueva-aula');
@@ -30,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     // Enviar formulario para agregar aula
-    document.getElementById('form-nueva-aula').addEventListener('submit', async function(e) {
+    document.getElementById('form-nueva-aula').addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const nombre = document.getElementById('nombre-aula').value.trim();
@@ -45,17 +56,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch('http://localhost:3000/aulas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    nombre,
-                    idEdificio
-                })
+                body: JSON.stringify({ nombre, idEdificio })
             });
 
             if (res.ok) {
                 alert('Aula agregada correctamente');
                 modal.classList.add('hidden');
                 this.reset();
-                // Si tienes función para recargar la tabla, llama aquí
                 renderizarTablaAulas();
             } else {
                 const data = await res.json();
@@ -102,6 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error al cargar aulas:', error);
         }
     }
-    renderizarTablaAulas()
 
+    renderizarTablaAulas();
 });

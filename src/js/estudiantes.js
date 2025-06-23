@@ -1,3 +1,19 @@
+document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
+
+    renderizarTablaEstudiantes();
+});
+
+// 🔄 Renderizar tabla de estudiantes
 async function renderizarTablaEstudiantes() {
     try {
         const res = await fetch('http://localhost:3000/estudiantes');
@@ -8,7 +24,6 @@ async function renderizarTablaEstudiantes() {
 
         const tabla = document.createElement('table');
         tabla.className = 'estudiantes-table';
-        console.log(estudiantes);
 
         tabla.innerHTML = `
             <thead>
@@ -59,9 +74,7 @@ async function renderizarTablaEstudiantes() {
     }
 }
 
-// Llama la función al cargar la página
-document.addEventListener('DOMContentLoaded', renderizarTablaEstudiantes);
-
+// 👆 Cargar datos en modal de actualización
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('btn-actualizar-estudiante')) {
         const btn = e.target;
@@ -76,7 +89,7 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Cerrar modal
+// ❌ Cerrar modal
 document.getElementById('cerrar-modal-actualizar-estudiante').onclick = function() {
     document.getElementById('modal-actualizar-estudiante').classList.add('hidden');
 };
@@ -86,7 +99,7 @@ window.addEventListener('click', function(e) {
     }
 });
 
-// Enviar actualización
+// 💾 Enviar actualización
 document.getElementById('form-actualizar-estudiante').addEventListener('submit', async function(e) {
     e.preventDefault();
     const id = document.getElementById('actualizar-id-estudiante').value;
