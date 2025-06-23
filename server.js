@@ -615,11 +615,12 @@ app.post("/login", async (req, res) => {
   const { usuario, contrasena } = req.body;
   try {
     const pool = await obtenerConexionDB();
+    // Usar el procedimiento almacenado para validar login con clave fija
     const result = await pool.request()
-      .input("usuario", usuario)
-      .input("password", contrasena)
-      .query(`SELECT * FROM Usuario WHERE Usuario = @usuario AND Password = @password`);
-    if (result.recordset.length === 1) {
+      .input("Usuario", usuario)
+      .input("Password", contrasena)
+      .execute("ValidarLogin");
+    if (result.recordset.length === 1 && result.recordset[0].Usuario) {
       // Usuario autenticado
       res.json({ success: true, usuario: result.recordset[0].Usuario, nombre: result.recordset[0].Nombre });
     } else {
