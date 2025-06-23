@@ -171,7 +171,6 @@ CREATE TABLE PRERREQUISITO (
     FOREIGN KEY (ID_Curso_Prerequisito) REFERENCES CURSO(ID_Curso)
 );
 
-
 -- Agregar la columna Estado (puede ser NULL al principio si ya hay datos)
 ALTER TABLE CALIFICACIONES
 ADD Estado NVARCHAR(10);
