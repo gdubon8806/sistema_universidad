@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
     // Abrir y cerrar modal
     const openBtn = document.getElementById('abrir-modal');
     const modal = document.getElementById('modal-nueva-aula');
@@ -30,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     // Enviar formulario para agregar aula
-    document.getElementById('form-nueva-aula').addEventListener('submit', async function(e) {
+    document.getElementById('form-nueva-aula').addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const nombre = document.getElementById('nombre-aula').value.trim();

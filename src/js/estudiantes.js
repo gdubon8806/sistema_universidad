@@ -62,7 +62,7 @@ async function renderizarTablaEstudiantes() {
 // Llama la función al cargar la página
 document.addEventListener('DOMContentLoaded', renderizarTablaEstudiantes);
 
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
     if (e.target.classList.contains('btn-actualizar-estudiante')) {
         const btn = e.target;
         document.getElementById('actualizar-id-estudiante').value = btn.dataset.id;
@@ -77,17 +77,17 @@ document.addEventListener('click', function(e) {
 });
 
 // Cerrar modal
-document.getElementById('cerrar-modal-actualizar-estudiante').onclick = function() {
+document.getElementById('cerrar-modal-actualizar-estudiante').onclick = function () {
     document.getElementById('modal-actualizar-estudiante').classList.add('hidden');
 };
-window.addEventListener('click', function(e) {
+window.addEventListener('click', function (e) {
     if (e.target === document.getElementById('modal-actualizar-estudiante')) {
         document.getElementById('modal-actualizar-estudiante').classList.add('hidden');
     }
 });
 
 // Enviar actualización
-document.getElementById('form-actualizar-estudiante').addEventListener('submit', async function(e) {
+document.getElementById('form-actualizar-estudiante').addEventListener('submit', async function (e) {
     e.preventDefault();
     const id = document.getElementById('actualizar-id-estudiante').value;
     const nombres = document.getElementById('actualizar-nombre-estudiante').value.trim();
@@ -126,8 +126,18 @@ document.getElementById('form-actualizar-estudiante').addEventListener('submit',
 
 // Evento para abrir historial al hacer clic en una fila
 document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
     // Delegación de evento para filas de estudiantes
-    document.getElementById('estudiantes-contenedor').addEventListener('click', async function(e) {
+    document.getElementById('estudiantes-contenedor').addEventListener('click', async function (e) {
         const fila = e.target.closest('tr[data-id-estudiante]');
         if (fila) {
             const idEstudiante = fila.getAttribute('data-id-estudiante');
@@ -181,10 +191,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Cerrar modal
-    document.getElementById('cerrar-modal-historial-estudiante').onclick = function() {
+    document.getElementById('cerrar-modal-historial-estudiante').onclick = function () {
         document.getElementById('modal-historial-estudiante').classList.add('hidden');
     };
-    window.addEventListener('click', function(e) {
+    window.addEventListener('click', function (e) {
         if (e.target === document.getElementById('modal-historial-estudiante')) {
             document.getElementById('modal-historial-estudiante').classList.add('hidden');
         }

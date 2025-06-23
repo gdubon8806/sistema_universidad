@@ -1,5 +1,15 @@
 // filepath: c:\Users\germa\OneDrive\Escritorio\sistema_universidad\src\js\secciones.js
 document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
     // Abrir y cerrar modal
     const openBtn = document.getElementById('abrir-modal');
     const modal = document.getElementById('modal-nueva-seccion');
@@ -56,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     // Enviar formulario para agregar sección
-    document.getElementById('form-nueva-seccion').addEventListener('submit', async function(e) {
+    document.getElementById('form-nueva-seccion').addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const codigo = document.getElementById('codigo-seccion').value.trim();
@@ -157,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Llama la función al cargar la página
     renderizarTablaSecciones();
 
-    document.getElementById('abrir-modal').addEventListener('click', async function() {
+    document.getElementById('abrir-modal').addEventListener('click', async function () {
         document.getElementById('modal-nueva-seccion').classList.remove('hidden');
 
         // Llenar select de periodos académicos

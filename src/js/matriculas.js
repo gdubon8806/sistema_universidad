@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
     // Abrir y cerrar modal
     const openBtn = document.getElementById('abrir-modal');
     const modal = document.getElementById('modal-nueva-matricula');
@@ -15,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Enviar formulario para agregar matrícula
-    document.getElementById('form-nueva-matricula').addEventListener('submit', async function(e) {
+    document.getElementById('form-nueva-matricula').addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const fecha = document.getElementById('fecha-matricula').value;
@@ -126,7 +136,7 @@ document.addEventListener('DOMContentLoaded', renderizarTablaMatriculas);
 // }
 
 
-document.getElementById('abrir-modal').addEventListener('click', async function() {
+document.getElementById('abrir-modal').addEventListener('click', async function () {
     document.getElementById('modal-seleccionar-estudiante').classList.remove('hidden');
     // Llenar selector de estudiantes
     const select = document.getElementById('selector-estudiante-matricula');
@@ -144,15 +154,15 @@ document.getElementById('abrir-modal').addEventListener('click', async function(
 });
 
 // Cerrar modales
-document.getElementById('cerrar-modal-seleccionar-estudiante').onclick = function() {
+document.getElementById('cerrar-modal-seleccionar-estudiante').onclick = function () {
     document.getElementById('modal-seleccionar-estudiante').classList.add('hidden');
 };
-document.getElementById('cerrar-modal-nueva-matricula').onclick = function() {
+document.getElementById('cerrar-modal-nueva-matricula').onclick = function () {
     document.getElementById('modal-nueva-matricula').classList.add('hidden');
 };
 
 // Verificar matrícula al seleccionar estudiante
-document.getElementById('selector-estudiante-matricula').addEventListener('change', async function() {
+document.getElementById('selector-estudiante-matricula').addEventListener('change', async function () {
     const idEstudiante = this.value;
     const mensaje = document.getElementById('mensaje-matricula-existe');
     const btnContinuar = document.getElementById('continuar-matricula');
@@ -160,7 +170,7 @@ document.getElementById('selector-estudiante-matricula').addEventListener('chang
     btnContinuar.disabled = true;
     if (idEstudiante) {
         const res = await fetch(`http://localhost:3000/matricula-existe?idEstudiante=${idEstudiante}`);
-        const data = await res.json(); 
+        const data = await res.json();
         console.log(data);
         if (data.existe) {
             mensaje.textContent = 'Ya matriculó este periodo.';
@@ -172,7 +182,7 @@ document.getElementById('selector-estudiante-matricula').addEventListener('chang
 });
 
 // Al dar continuar, abrir el modal de matrícula
-document.getElementById('continuar-matricula').addEventListener('click', async function() {
+document.getElementById('continuar-matricula').addEventListener('click', async function () {
     const idEstudiante = document.getElementById('selector-estudiante-matricula').value;
     if (!idEstudiante) return;
     estudianteSeleccionado = idEstudiante;

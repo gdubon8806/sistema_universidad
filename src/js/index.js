@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../pages/Login/index.html';
+        });
+    }
     try {
         const res = await fetch('http://localhost:3000/dashboard-metrics');
         const data = await res.json();

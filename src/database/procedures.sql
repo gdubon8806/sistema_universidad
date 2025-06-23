@@ -41,53 +41,55 @@ BEGIN
     END CATCH
 END
 
-
-
-CREATE OR ALTER PROCEDURE ObtenerSeccionesDisponibles
-  @ID_Estudiante INT,
-  @ID_PeriodoActual INT
+CREATE PROCEDURE InsertarUsuarioEncriptado
+    @Usuario NVARCHAR(50),
+    @Password NVARCHAR(100),
+    @Nombre NVARCHAR(100),
+    @Apellido NVARCHAR(100),
+    @Rol NVARCHAR(50)
 AS
 BEGIN
-  SET NOCOUNT ON;
-
-  SELECT 
-    S.*,           
-    C.Nombre AS Nombre_Curso
-  FROM SECCION S
-  JOIN CURSO C ON C.ID_Curso = S.ID_Curso
-
-  -- Relacionar con cursos de la carrera del estudiante
-  WHERE S.ID_Periodo = @ID_PeriodoActual
-    AND C.ID_Curso IN (
-      SELECT CC.ID_Curso
-      FROM CURSOS_CARRERAS CC
-      JOIN ADMISIONES A ON CC.ID_Carrera = A.ID_Carrera
-      WHERE A.ID_Estudiante = @ID_Estudiante
-    )
-
-    --  Excluir cursos ya aprobados
-    AND S.ID_Curso NOT IN (
-      SELECT SC.ID_Curso
-      FROM CALIFICACION CAL
-      JOIN MATRICULA M ON CAL.ID_Matricula = M.ID_Matricula
-      JOIN SECCION SC ON SC.ID_Seccion = M.ID_Seccion
-      WHERE M.ID_Estudiante = @ID_Estudiante
-        AND CAL.Estado = 'Aprobado'
-    )
-
-    --  Excluir si no cumple prerrequisitos
-    AND NOT EXISTS (
-      SELECT 1
-      FROM PRERREQUISITO PR
-      WHERE PR.ID_Curso = S.ID_Curso
-        AND NOT EXISTS (
-          SELECT 1
-          FROM CALIFICACION CAL
-          JOIN MATRICULA M ON CAL.ID_Matricula = M.ID_Matricula
-          JOIN SECCION SC ON SC.ID_Seccion = M.ID_Seccion
-          WHERE M.ID_Estudiante = @ID_Estudiante
-            AND CAL.Estado = 'Aprobado'
-            AND SC.ID_Curso = PR.ID_Curso_Prerequisito
-        )
+    INSERT INTO Usuario (Usuario, Password, Nombre, Apellido, Rol, Fecha_Creacion)
+    VALUES (
+        @Usuario,
+        CONVERT(VARCHAR(256), ENCRYPTBYPASSPHRASE('ClaveFijaParaUsuarios2025', @Password), 1),
+        @Nombre,
+        @Apellido,
+        @Rol,
+        GETDATE()
     );
-END;
+END
+GO
+
+-- Procedimiento para validar login desencriptando la contraseña
+CREATE PROCEDURE ValidarLogin
+    @Usuario NVARCHAR(50),
+    @Password NVARCHAR(100)
+AS
+BEGIN
+    DECLARE @PasswordEncriptado VARBINARY(256);
+
+    SELECT @PasswordEncriptado = CONVERT(VARBINARY(256), Password, 1)
+    FROM Usuario
+    WHERE Usuario = @Usuario;
+
+    IF @PasswordEncriptado IS NOT NULL AND
+       CONVERT(NVARCHAR(100), DECRYPTBYPASSPHRASE('ClaveFijaParaUsuarios2025', @PasswordEncriptado)) = @Password
+    BEGIN
+        SELECT * FROM Usuario WHERE Usuario = @Usuario;
+    END
+    ELSE
+    BEGIN
+        SELECT NULL AS Usuario;
+    END
+END
+GO
+
+--Ejemplo de inserción de usuario
+EXEC InsertarUsuarioEncriptado
+    @Usuario = 'admin1',
+    @Password = 'admin123',
+    @Nombre = 'Juan',
+    @Apellido = 'Pérez',
+    @Rol = 'Administrador';
+

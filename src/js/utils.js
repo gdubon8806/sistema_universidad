@@ -31,3 +31,21 @@ function formatearFecha(fechaString) {
         return null;
     }
 }
+
+/**
+ * Verifica si el usuario está logueado.
+ * Si no lo está, lo redirige a la página de acceso denegado.
+ */
+function protegerRuta() {
+    if (localStorage.getItem('usuarioLogueado') !== 'true') {
+        const path = window.location.pathname;
+
+        // Si estás en la raíz "Pages/index.html" o simplemente "Pages/"
+        if (path.endsWith('/pages/') || path.endsWith('/Pages/index.html')) {
+            window.location.href = 'Login/accesoDenegado.html';
+        } else {
+            // Para subrutas como "Pages/Matriculas/"
+            window.location.href = '../Login/accesoDenegado.html';
+        }
+    }
+}

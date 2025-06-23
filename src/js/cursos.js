@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
     // Abrir y cerrar modal
     const openBtn = document.getElementById('abrir-modal');
     const modal = document.getElementById('modal-nuevo-curso');
@@ -137,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(res => res.json())
             .then(carreras => {
                 const select = document.getElementById('carrera-curso');
-                console.log(select);    
+                console.log(select);
                 select.innerHTML = '<option value="">Seleccione una carrera</option>';
                 console.log(carreras);
                 carreras.forEach(c => {

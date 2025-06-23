@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
     // Abrir y cerrar modal
     const openBtn = document.getElementById('abrir-modal-calificacion');
     const modal = document.getElementById('modal-nueva-calificacion');
@@ -27,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     // Enviar formulario para agregar calificación
-    document.getElementById('form-nueva-calificacion').addEventListener('submit', async function(e) {
+    document.getElementById('form-nueva-calificacion').addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const idMatricula = document.getElementById('matricula-calificacion').value;

@@ -40,6 +40,17 @@ async function renderizarTablaAdmisiones() {
 renderizarTablaAdmisiones();
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
     // Abrir y cerrar modal
     const openBtn = document.getElementById('openModal');
     const modal = document.getElementById('modal-nueva-admision');
@@ -72,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     // Enviar formulario de admisión
-    document.getElementById('form-nueva-admision').addEventListener('submit', async function(e) {
+    document.getElementById('form-nueva-admision').addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const nombre = document.getElementById('nombre-alumno').value.trim();

@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
     const abrirModalBtn = document.getElementById('abrir-modal');
     const modal = document.getElementById('modal');
     const cerrarModalBtn = document.getElementById('cerrar-modal');
@@ -75,7 +85,7 @@ async function renderizarTablaCarreras() {
 
     // Evento para abrir modal al hacer clic en una carrera
     tabla.querySelectorAll('.fila-carrera').forEach(row => {
-        row.addEventListener('click', async function() {
+        row.addEventListener('click', async function () {
             const idCarrera = this.dataset.id;
             const nombreCarrera = this.dataset.nombre;
             document.getElementById('titulo-cursos-carrera').textContent = `Cursos de la carrera: ${nombreCarrera}`;
@@ -94,10 +104,10 @@ async function renderizarTablaCarreras() {
 }
 
 // Cerrar modal
-document.getElementById('cerrar-modal-cursos-carrera').onclick = function() {
+document.getElementById('cerrar-modal-cursos-carrera').onclick = function () {
     document.getElementById('modal-cursos-carrera').classList.add('hidden');
 };
-window.addEventListener('click', function(e) {
+window.addEventListener('click', function (e) {
     if (e.target === document.getElementById('modal-cursos-carrera')) {
         document.getElementById('modal-cursos-carrera').classList.add('hidden');
     }
@@ -105,7 +115,7 @@ window.addEventListener('click', function(e) {
 
 function agregarCarrera() {
     const form = document.getElementById('form-carrera');
-    form.addEventListener('submit', async function(e) {
+    form.addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const codigo = document.getElementById('codigo-carrera').value.trim();

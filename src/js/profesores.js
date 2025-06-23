@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
+    protegerRuta();
+
+    // Botón cerrar sesión
+    const cerrarSesionBtn = document.getElementById('cerrar-sesion');
+    if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '../../pages/Login/index.html';
+        });
+    }
     renderizarTablaProfesores();
 
     // Abrir y cerrar modal para nuevo profesor
@@ -15,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Enviar formulario para agregar profesor
-    document.getElementById('form-nuevo-profesor').addEventListener('submit', async function(e) {
+    document.getElementById('form-nuevo-profesor').addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const nombre = document.getElementById('nombre-profesor').value.trim();
@@ -114,7 +124,7 @@ async function renderizarTablaProfesores() {
 }
 
 // Abrir modal y llenar datos para actualizar
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
     if (e.target.classList.contains('btn-actualizar-profesor')) {
         const btn = e.target;
         document.getElementById('actualizar-id-profesor').value = btn.dataset.id;
@@ -128,17 +138,17 @@ document.addEventListener('click', function(e) {
 });
 
 // Cerrar modal de actualizar
-document.getElementById('cerrar-modal-actualizar-profesor').onclick = function() {
+document.getElementById('cerrar-modal-actualizar-profesor').onclick = function () {
     document.getElementById('modal-actualizar-profesor').classList.add('hidden');
 };
-window.addEventListener('click', function(e) {
+window.addEventListener('click', function (e) {
     if (e.target === document.getElementById('modal-actualizar-profesor')) {
         document.getElementById('modal-actualizar-profesor').classList.add('hidden');
     }
 });
 
 // Enviar actualización
-document.getElementById('form-actualizar-profesor').addEventListener('submit', async function(e) {
+document.getElementById('form-actualizar-profesor').addEventListener('submit', async function (e) {
     e.preventDefault();
     const id = document.getElementById('actualizar-id-profesor').value;
     const nombre = document.getElementById('actualizar-nombre-profesor').value.trim();
