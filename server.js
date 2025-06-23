@@ -687,27 +687,7 @@ app.get("/estudiantes/:id/historial", async (req, res) => {
   }
 });
 
-// Endpoint para login de usuario administrativo
-app.post("/login", async (req, res) => {
-  const { usuario, contrasena } = req.body;
-  try {
-    const pool = await obtenerConexionDB();
-    // Usar el procedimiento almacenado para validar login con clave fija
-    const result = await pool.request()
-      .input("Usuario", usuario)
-      .input("Password", contrasena)
-      .execute("ValidarLogin");
-    if (result.recordset.length === 1 && result.recordset[0].Usuario) {
-      // Usuario autenticado
-      res.json({ success: true, usuario: result.recordset[0].Usuario, nombre: result.recordset[0].Nombre });
-    } else {
-      res.status(401).json({ success: false, message: "Usuario o contraseña incorrectos" });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Error en el servidor" });
-  }
-});
+
 
 const PORT = 3000;
 app.listen(PORT, () => {

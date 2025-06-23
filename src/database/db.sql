@@ -175,14 +175,3 @@ CREATE TABLE PRERREQUISITO (
 -- Agregar la columna Estado (puede ser NULL al principio si ya hay datos)
 ALTER TABLE CALIFICACIONES
 ADD Estado NVARCHAR(10);
-
-CREATE TABLE Usuario (
-    ID_Usuario INT PRIMARY KEY IDENTITY(1,1),
-    Usuario NVARCHAR(50) NOT NULL UNIQUE,
-    Password NVARCHAR(255) NOT NULL, -- Se recomienda almacenar hash
-    Nombre NVARCHAR(100) NOT NULL,
-    Apellido NVARCHAR(100) NOT NULL,
-    Rol NVARCHAR(50), -- Opcional: Ejemplo 'Administrador', 'Soporte', etc.
-    Fecha_Creacion DATETIME DEFAULT GETDATE() -- Fecha de creación del usuario
-);
-GO
