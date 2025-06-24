@@ -97,6 +97,20 @@
         </div>
     </div>
 
+    <!-- Modal para motivo de inactivación -->
+    <div id="modal-inactivar-matricula" class="modal hidden">
+        <div class="modal-contenido">
+            <span id="cerrar-modal-inactivar-matricula" class="cerrar">&times;</span>
+            <h3>Inactivar Matrícula</h3>
+            <form id="form-inactivar-matricula">
+                <input type="hidden" id="id-matricula-inactivar">
+                <label for="motivo-inactivar">Motivo de inactivación:</label>
+                <textarea id="motivo-inactivar" name="motivo-inactivar" required></textarea>
+                <button type="submit" class="btn-primario">Confirmar</button>
+            </form>
+        </div>
+    </div>
+
 </body>
 <script src="../../js/utils.js" ></script>
 <script src="../../js/matriculas.js"></script>

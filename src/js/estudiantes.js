@@ -13,28 +13,26 @@ async function renderizarTablaEstudiantes() {
         tabla.innerHTML = `
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
                     <th>DNI</th>
                     <th>Correo</th>
                     <th>Teléfono</th>
-                    <th>Fecha Nacimiento</th>
-                    <th>Carrera</th>
+                    <th>Fecha de nacimiento</th>
+                    <th>Activo</th> <!-- Nueva columna -->
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 ${estudiantes.map(e => `
                     <tr data-id-estudiante="${e.ID_Estudiante}" data-nombre-estudiante="${e.Nombres}">
-                        <td>${e.ID_Estudiante}</td>
                         <td>${e.Nombres}</td>
                         <td>${e.Apellidos}</td>
                         <td>${e.DNI}</td>
                         <td>${e.Correo_Electronico || ''}</td>
                         <td>${e.Telefono || ''}</td>
                         <td>${e.Fecha_Nacimiento ? e.Fecha_Nacimiento.split('T')[0] : ''}</td>
-                        <td>${e.Carrera || ''}</td>
+                        <td>${e.Activo ? 'Sí' : 'No'}</td> <!-- Valor de Activo -->
                         <td>
                             <button class="btn-actualizar-estudiante" 
                                 data-id="${e.ID_Estudiante}"
@@ -199,4 +197,56 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('modal-historial-estudiante').classList.add('hidden');
         }
     });
+});
+
+async function renderizarWidgetsCarreras() {
+    // Obtén estudiantes con carrera y carreras desde el backend
+    const [estudiantesRes, carrerasRes] = await Promise.all([
+        fetch('http://localhost:3000/estudiantes-con-carrera'),
+        fetch('http://localhost:3000/carreras')
+    ]);
+    const estudiantes = await estudiantesRes.json();
+    const carreras = await carrerasRes.json();
+    console.log(carreras);
+    // Agrupa estudiantes por carrera y estado
+    const resumen = {};
+    carreras.forEach(carrera => {
+        resumen[carrera.ID_Carrera] = {
+            nombre: carrera.nombre,
+            activos: 0,
+            inactivos: 0
+        };
+    });
+
+    estudiantes.forEach(est => {
+        if (resumen[est.ID_Carrera]) {
+            if (est.Activo) {
+                resumen[est.ID_Carrera].activos++;
+            } else {
+                resumen[est.ID_Carrera].inactivos++;
+            }
+        }
+    });
+
+    // Genera los widgets dinámicamente
+    const contenedor = document.getElementById('dashboard-cards-dinamico');
+    contenedor.innerHTML = '';
+    Object.values(resumen).forEach(carrera => {
+        contenedor.innerHTML += `
+            <div class="dashboard-card">
+                <div class="dashboard-card-icon estudiantes-total">🎓</div>
+                <div>
+                    <div class="dashboard-card-title">${carrera.nombre}</div>
+                    <div class="dashboard-card-metric">Estudiantes Activos: <b>${carrera.activos}</b></div>
+                    <div class="dashboard-card-metric">Estudiantes Inactivos: <b>${carrera.inactivos}</b></div>
+                </div>
+            </div>
+        `;
+    });
+}
+
+// Llama a la función después de cargar la página o los estudiantes
+document.addEventListener('DOMContentLoaded', () => {
+    renderizarWidgetsCarreras();
+    // ...tu código existente...
 });

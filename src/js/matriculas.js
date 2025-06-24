@@ -95,6 +95,9 @@ async function renderizarTablaMatriculas() {
                     <th>DNI</th>
                     <th>Sección</th>
                     <th>Curso</th>
+                    <th>Periodo Académico</th>
+                    <th>Activo</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -106,6 +109,11 @@ async function renderizarTablaMatriculas() {
                         <td>${m.DNI}</td>
                         <td>${m.Seccion}</td>
                         <td>${m.Curso}</td>
+                        <td>${m.Nombre}</td>
+                        <td>${m.Activo ? 'Sí' : 'No'}</td>
+                        <td>
+                            ${m.Activo ? `<button class="btn-inactivar" data-id="${m.ID_Matricula}">Inactivar</button>` : ''}
+                        </td>
                     </tr>
                 `).join('')}
             </tbody>
@@ -235,3 +243,48 @@ async function mostrarCursosYSecciones(idEstudiante, idPeriodo) {
 
 let estudianteSeleccionado = null;
 let periodoActivo = null;
+
+// Delegación para botón Inactivar
+document.getElementById('matriculas-contenedor').addEventListener('click', function (e) {
+    if (e.target.classList.contains('btn-inactivar')) {
+        const id = e.target.getAttribute('data-id');
+        document.getElementById('id-matricula-inactivar').value = id;
+        document.getElementById('motivo-inactivar').value = '';
+        document.getElementById('modal-inactivar-matricula').classList.remove('hidden');
+    }
+});
+
+// Cerrar modal
+document.getElementById('cerrar-modal-inactivar-matricula').onclick = function () {
+    document.getElementById('modal-inactivar-matricula').classList.add('hidden');
+};
+
+// Enviar motivo de inactivación
+document.getElementById('form-inactivar-matricula').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const id = document.getElementById('id-matricula-inactivar').value;
+
+    const motivo = document.getElementById('motivo-inactivar').value.trim();
+    if (!motivo) {
+        alert('Debes ingresar un motivo.');
+        return;
+    }
+    try {
+        const res = await fetch(`http://localhost:3000/matriculas/${id}/inactivar`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ motivo })
+        });
+        if (res.ok) {
+            alert('Matrícula inactivada correctamente');
+            document.getElementById('modal-inactivar-matricula').classList.add('hidden');
+            renderizarTablaMatriculas();
+        } else {
+            const data = await res.json();
+            alert(data.error || 'Error al inactivar matrícula');
+        }
+    } catch (error) {
+        alert('Error al conectar con el servidor');
+        console.error(error);
+    }
+});

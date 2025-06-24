@@ -115,6 +115,21 @@
             </form>
         </div>
     </div>
+
+    <!-- Modal para motivo de inactivación de admisión -->
+    <div id="modal-inactivar-admision" class="modal hidden">
+        <div class="modal-contenido">
+            <span id="cerrar-modal-inactivar-admision" class="cerrar">&times;</span>
+            <h3>Inactivar Admisión</h3>
+            <form id="form-inactivar-admision">
+                <input type="hidden" id="id-admision-inactivar">
+                <input type="hidden" id="id-estudiante-inactivar">
+                <label for="motivo-inactivar-admision">Motivo de inactivación:</label>
+                <textarea id="motivo-inactivar-admision" name="motivo-inactivar-admision" required></textarea>
+                <button type="submit" class="btn-primario">Confirmar</button>
+            </form>
+        </div>
+    </div>
 </body>
 <script src="../../js/utils.js"></script>
 <script defer src="../../js/admisiones.js"></script>

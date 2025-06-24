@@ -15,7 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.getElementById('cerrar-modal-nueva-calificacion');
 
     if (openBtn && modal && closeBtn) {
-        openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+        openBtn.addEventListener('click', () => {
+            llenarSelectMatriculas(); // <-- Solo aquí
+            modal.classList.remove('hidden')
+        });
         closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
         window.addEventListener('click', (e) => {
             if (e.target === modal) modal.classList.add('hidden');
@@ -23,18 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Llenar select de matrículas (estudiante + sección)
-    fetch('http://localhost:3000/matriculas')
-        .then(res => res.json())
-        .then(matriculas => {
-            const select = document.getElementById('matricula-calificacion');
-            select.innerHTML = '<option value="">Seleccione una matrícula</option>';
-            matriculas.forEach(m => {
-                const option = document.createElement('option');
-                option.value = m.ID_Matricula;
-                option.textContent = `${m.Estudiante} - ${m.Seccion} (${m.Curso})`;
-                select.appendChild(option);
-            });
-        });
+    llenarSelectMatriculas();
 
     // Enviar formulario para agregar calificación
     document.getElementById('form-nueva-calificacion').addEventListener('submit', async function (e) {
@@ -77,6 +69,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+async function llenarSelectMatriculas() {
+    const res = await fetch('http://localhost:3000/matriculas');
+    const matriculas = await res.json();
+    const calRes = await fetch('http://localhost:3000/calificaciones');
+    const calificaciones = await calRes.json();
+
+    // IDs de matrículas que ya tienen calificación activa
+    const matriculasConCalificacion = new Set(
+        calificaciones
+            .filter(c => c.Activo) // solo activas
+            .map(c => c.ID_Matricula)
+    );
+
+    const select = document.getElementById('matricula-calificacion');
+    select.innerHTML = '<option value="">Seleccione una matrícula</option>';
+    matriculas
+        .filter(m => m.Activo && !matriculasConCalificacion.has(m.ID_Matricula))
+        .forEach(m => {
+            select.innerHTML += `<option value="${m.ID_Matricula}">${m.Estudiante} - ${m.Seccion} (${m.Curso})</option>`;
+        });
+}
+
 async function renderizarTablaCalificaciones() {
     try {
         const res = await fetch('http://localhost:3000/calificaciones');
@@ -100,6 +114,7 @@ async function renderizarTablaCalificaciones() {
                     <th>Nota</th>
                     <th>Estado</th>
                     <th>Fecha</th>
+                    <th>Activo</th> <!-- Nueva columna -->
                 </tr>
             </thead>
             <tbody>
@@ -113,6 +128,7 @@ async function renderizarTablaCalificaciones() {
                         <td>${c.Nota}</td>
                         <td>${c.Estado}</td>
                         <td>${c.Fecha_Registro ? c.Fecha_Registro.split('T')[0] : ''}</td>
+                        <td>${c.Activo ? 'Sí' : 'No'}</td> <!-- Valor de Activo -->
                     </tr>
                 `).join('')}
             </tbody>

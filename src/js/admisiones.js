@@ -17,14 +17,20 @@ async function renderizarTablaAdmisiones() {
                     <th>Nombre de estudiante</th>
                     <th>Carrera</th>
                     <th>Fecha de ingreso</th>
+                    <th>Activo</th> <!-- Nueva columna -->
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                ${admisiones.map(a => `
+                ${admisiones.map(admision => `
                     <tr>
-                        <td>${a.estudiante}</td>
-                        <td>${a.carrera}</td>
-                        <td>${new Date(a.fecha_ingreso).toLocaleDateString()}</td>
+                        <td>${admision.estudiante}</td>
+                        <td>${admision.carrera}</td>
+                        <td>${new Date(admision.fecha_ingreso).toLocaleDateString()}</td>
+                        <td>${admision.Activo ? 'Sí' : 'No'}</td> <!-- Valor de Activo -->
+                        <td>
+                          ${admision.Activo ? `<button class="btn-inactivar-admision" data-id="${admision.ID_Admision}" data-id-estudiante="${admision.ID_Estudiante}">Inactivar</button>` : ''}
+                        </td>
                     </tr>
                 `).join('')}
             </tbody>
@@ -125,6 +131,49 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 const data = await res.json();
                 alert(data.error || 'Error al crear la admisión');
+            }
+        } catch (error) {
+            alert('Error al conectar con el servidor');
+            console.error(error);
+        }
+    });
+
+    // Delegación para botón Inactivar admisión
+    document.getElementById('tabla-admisiones-contenedor').addEventListener('click', function(e) {
+        if (e.target.classList.contains('btn-inactivar-admision')) {
+            document.getElementById('id-admision-inactivar').value = e.target.getAttribute('data-id');
+            document.getElementById('id-estudiante-inactivar').value = e.target.getAttribute('data-id-estudiante');
+            document.getElementById('motivo-inactivar-admision').value = '';
+            document.getElementById('modal-inactivar-admision').classList.remove('hidden');
+        }
+    });
+
+    document.getElementById('cerrar-modal-inactivar-admision').onclick = function() {
+        document.getElementById('modal-inactivar-admision').classList.add('hidden');
+    };
+
+    document.getElementById('form-inactivar-admision').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const idAdmision = document.getElementById('id-admision-inactivar').value;
+        const idEstudiante = document.getElementById('id-estudiante-inactivar').value;
+        const motivo = document.getElementById('motivo-inactivar-admision').value.trim();
+        if (!motivo) {
+            alert('Debes ingresar un motivo.');
+            return;
+        }
+        try {
+            const res = await fetch(`http://localhost:3000/admisiones/${idAdmision}/inactivar`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ motivo, idEstudiante })
+            });
+            if (res.ok) {
+                alert('Admisión y datos asociados inactivados correctamente');
+                document.getElementById('modal-inactivar-admision').classList.add('hidden');
+                renderizarTablaAdmisiones();
+            } else {
+                const data = await res.json();
+                alert(data.error || 'Error al inactivar admisión');
             }
         } catch (error) {
             alert('Error al conectar con el servidor');

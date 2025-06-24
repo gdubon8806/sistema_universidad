@@ -93,3 +93,76 @@ EXEC InsertarUsuarioEncriptado
     @Apellido = 'Pérez',
     @Rol = 'Administrador';
 
+
+CREATE OR ALTER PROCEDURE InactivarMatriculaYCalificaciones
+    @ID_Matricula INT,
+    @Motivo NVARCHAR(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Inactivar la matrícula
+        UPDATE MATRICULA
+        SET Activo = 0,
+            Motivo_Inactivacion = @Motivo
+        WHERE ID_Matricula = @ID_Matricula;
+
+        -- Inactivar las calificaciones asociadas
+        UPDATE CALIFICACION
+        SET Activo = 0,
+            Motivo_Inactivacion = @Motivo
+        WHERE ID_Matricula = @ID_Matricula;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
+
+
+CREATE OR ALTER PROCEDURE InactivarAdmisionCascada
+    @ID_Admision INT,
+    @ID_Estudiante INT,
+    @Motivo NVARCHAR(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Inactivar admisión
+        UPDATE ADMISIONES
+        SET Activo = 0, Motivo_Inactivacion = @Motivo
+        WHERE ID_Admision = @ID_Admision;
+
+        -- Inactivar estudiante
+        UPDATE ESTUDIANTE
+        SET Activo = 0, Motivo_Inactivacion = @Motivo
+        WHERE ID_Estudiante = @ID_Estudiante;
+
+        -- Inactivar matrículas del estudiante
+        UPDATE MATRICULA
+        SET Activo = 0, Motivo_Inactivacion = @Motivo
+        WHERE ID_Estudiante = @ID_Estudiante;
+
+        -- Inactivar calificaciones asociadas a las matrículas del estudiante
+        UPDATE CALIFICACION
+        SET Activo = 0, Motivo_Inactivacion = @Motivo
+        WHERE ID_Matricula IN (
+            SELECT ID_Matricula FROM MATRICULA WHERE ID_Estudiante = @ID_Estudiante
+        );
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
+

@@ -113,63 +113,53 @@
   font-weight: 600;
 }
 
-.dashboard-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  justify-content: center;
-  margin-bottom: 40px;
+/* Estilo para el contenedor de widgets */
+#dashboard-cards-dinamico {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 30px;
+    margin-left: 0.5rem;
 }
 
+/* Estilo para cada widget */
 .dashboard-card {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
-  display: flex;
-  align-items: center;
-  min-width: 220px;
-  max-width: 260px;
-  flex: 1 1 220px;
-  padding: 22px 24px;
-  transition: box-shadow 0.2s, transform 0.2s;
-  border: 1.5px solid #e3e8ee;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 20px 30px;
+    min-width: 220px;
+    max-width: 300px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    transition: box-shadow 0.2s;
 }
 
 .dashboard-card:hover {
-  box-shadow: 0 8px 32px rgba(25, 118, 210, 0.18), 0 2px 8px rgba(0,0,0,0.13);
-  transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.13);
 }
 
 .dashboard-card-icon {
-  font-size: 2.5em;
-  margin-right: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: #e3f0fc;
-  flex-shrink: 0;
+    font-size: 2.5rem;
+    background: #e3e8ff;
+    border-radius: 50%;
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.dashboard-card-icon.estudiantes-total { background: #e3f0fc; color: #1976d2; }
-.dashboard-card-icon.estudiantes-activos { background: #e3fcec; color: #43a047; }
-.dashboard-card-icon.estudiantes-inactivos { background: #fde3e3; color: #e53935; }
-.dashboard-card-icon.estudiantes-carreras { background: #fff9e3; color: #fbc02d; }
-
 .dashboard-card-title {
-  font-size: 1.08em;
-  color: #555;
-  margin-bottom: 6px;
-  font-weight: 500;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 6px;
 }
 
 .dashboard-card-metric {
-  font-size: 2em;
-  font-weight: bold;
-  color: #1976d2;
-  letter-spacing: 1px;
+    font-size: 1rem;
+    margin-bottom: 2px;
 }
 
 /* Modal de actualizar estudiante */
@@ -268,6 +258,13 @@
 #historial-estudiante-contenido th {
   background: #f7fafd;
   color: #1976d2;
+}
+
+.descripcion-widgets {
+    margin-bottom: 15px;
+    color: #444;
+    font-size: 1rem;
+    margin-left: 0.5rem;
 }
 
 @media (max-width: 900px) {

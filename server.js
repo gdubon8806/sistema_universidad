@@ -78,7 +78,10 @@ app.get("/admisiones", async (req, res) => {
       SELECT 
         E.Nombres + ' ' + E.Apellidos AS estudiante,
         C.Nombre AS carrera,
-        A.Fecha_Ingreso AS fecha_ingreso
+        A.Fecha_Ingreso AS fecha_ingreso,
+        A.Activo,
+        A.ID_Admision,
+        E.ID_Estudiante
       FROM 
         ADMISIONES A
       INNER JOIN 
@@ -379,22 +382,20 @@ app.get("/estudiantes", async (req, res) => {
     const pool = await obtenerConexionDB();
     const result = await pool.request().query(`
       SELECT 
-        E.ID_Estudiante,
-        E.Nombres,
-        E.Apellidos,
-        E.DNI,
-        E.Correo_Electronico,
-        E.Telefono,
-        E.Fecha_Nacimiento,
-        C.Nombre AS Carrera
-      FROM ESTUDIANTE E
-      LEFT JOIN ADMISIONES A ON E.ID_Estudiante = A.ID_Estudiante
-      LEFT JOIN CARRERA C ON A.ID_Carrera = C.ID_Carrera
+        ID_Estudiante,
+        Nombres,
+        Apellidos,
+        DNI,
+        Correo_Electronico,
+        Telefono,
+        Fecha_Nacimiento,
+        Activo -- <--- Asegúrate de traer este campo
+      FROM ESTUDIANTE
     `);
     res.json(result.recordset);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Error al obtener los estudiantes" });
+    res.status(500).json({ error: "Error al obtener estudiantes" });
   }
 });
 
@@ -450,11 +451,14 @@ app.get("/matriculas", async (req, res) => {
         E.Nombres + ' ' + E.Apellidos AS Estudiante,
         E.DNI,
         S.Codigo AS Seccion,
-        C.Nombre AS Curso
+        C.Nombre AS Curso,
+        M.Activo,
+        PA.Nombre -- <--- Nuevo campo
       FROM MATRICULA M
       INNER JOIN ESTUDIANTE E ON M.ID_Estudiante = E.ID_Estudiante
       INNER JOIN SECCION S ON M.ID_Seccion = S.ID_Seccion
       INNER JOIN CURSO C ON S.ID_Curso = C.ID_Curso
+      INNER JOIN PERIODO_ACADEMICO PA ON S.ID_Periodo = PA.ID_Periodo -- <--- JOIN nuevo
       ORDER BY M.Fecha_Matricula DESC
     `);
     res.json(result.recordset);
@@ -469,27 +473,71 @@ app.get("/dashboard-metrics", async (req, res) => {
   try {
     const pool = await obtenerConexionDB();
 
-    const [estudiantes, docentes, materias, secciones, matriculas] = await Promise.all([
-      pool.request().query("SELECT COUNT(*) AS total FROM ESTUDIANTE"),
-      pool.request().query("SELECT COUNT(*) AS total FROM PROFESOR"),
-      pool.request().query("SELECT COUNT(*) AS total FROM CURSO"),
-      pool.request().query("SELECT COUNT(*) AS total FROM SECCION"),
-      pool.request().query("SELECT COUNT(*) AS total FROM MATRICULA")
+    // Obtén el periodo académico activo
+    const periodoResult = await pool.request().query(`
+      SELECT TOP 1 ID_Periodo FROM PERIODO_ACADEMICO WHERE Activo = 1
+    `);
+    const idPeriodo = periodoResult.recordset.length > 0 ? periodoResult.recordset[0].ID_Periodo : null;
+
+    // Promesas para cada métrica
+    const [
+      estudiantes,
+      docentes,
+      materias,
+      secciones,
+      matriculas
+    ] = await Promise.all([
+      pool.request().query(`
+        SELECT 
+          SUM(CASE WHEN Activo = 1 THEN 1 ELSE 0 END) AS activos,
+          SUM(CASE WHEN Activo = 0 THEN 1 ELSE 0 END) AS inactivos
+        FROM ESTUDIANTE
+      `),
+      pool.request().query(`
+        SELECT 
+          SUM(CASE WHEN Activo = 1 THEN 1 ELSE 0 END) AS activos,
+          SUM(CASE WHEN Activo = 0 THEN 1 ELSE 0 END) AS inactivos
+        FROM PROFESOR
+      `),
+      pool.request().query(`
+        SELECT 
+          SUM(CASE WHEN Activo = 1 THEN 1 ELSE 0 END) AS activos,
+          SUM(CASE WHEN Activo = 0 THEN 1 ELSE 0 END) AS inactivos
+        FROM CURSO
+      `),
+      pool.request().query(`
+        SELECT 
+          SUM(CASE WHEN Activo = 1 THEN 1 ELSE 0 END) AS activos,
+          SUM(CASE WHEN Activo = 0 THEN 1 ELSE 0 END) AS inactivos
+        FROM SECCION
+        ${idPeriodo ? "WHERE ID_Periodo = " + idPeriodo : ""}
+      `),
+      idPeriodo
+        ? pool.request()
+            .input('idPeriodo', idPeriodo)
+            .query(`
+              SELECT 
+                SUM(CASE WHEN M.Activo = 1 THEN 1 ELSE 0 END) AS activos,
+                SUM(CASE WHEN M.Activo = 0 THEN 1 ELSE 0 END) AS inactivos
+              FROM MATRICULA M
+              INNER JOIN SECCION S ON M.ID_Seccion = S.ID_Seccion
+              WHERE S.ID_Periodo = @idPeriodo
+            `)
+        : { recordset: [{ activos: 0, inactivos: 0 }] }
     ]);
 
     res.json({
-      estudiantes: estudiantes.recordset[0].total,
-      docentes: docentes.recordset[0].total,
-      materias: materias.recordset[0].total,
-      secciones: secciones.recordset[0].total,
-      matriculas: matriculas.recordset[0].total
+      estudiantes: estudiantes.recordset[0],
+      docentes: docentes.recordset[0],
+      materias: materias.recordset[0],
+      secciones: secciones.recordset[0],
+      matriculas: matriculas.recordset[0]
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al obtener métricas" });
   }
 });
-
 // Ruta para obtener las calificaciones
 app.get("/calificaciones", async (req, res) => {
   try {
@@ -503,7 +551,8 @@ app.get("/calificaciones", async (req, res) => {
         E.DNI,
         S.Codigo AS Seccion,
         Cu.Nombre AS Curso,
-        C.Estado AS Estado
+        C.Estado AS Estado,
+        C.Activo
       FROM CALIFICACION C
       INNER JOIN MATRICULA M ON C.ID_Matricula = M.ID_Matricula
       INNER JOIN ESTUDIANTE E ON M.ID_Estudiante = E.ID_Estudiante
@@ -745,7 +794,9 @@ app.get("/matricula-existe", async (req, res) => {
         SELECT COUNT(*) AS total
         FROM MATRICULA M
         INNER JOIN SECCION S ON M.ID_Seccion = S.ID_Seccion
-        WHERE M.ID_Estudiante = @idEstudiante AND S.ID_Periodo = @idPeriodo
+        WHERE M.ID_Estudiante = @idEstudiante 
+          AND S.ID_Periodo = @idPeriodo
+          AND M.Activo = 1 -- <--- Solo matrículas activas
       `);
 
     res.json({ existe: result.recordset[0].total > 0, idPeriodo });
@@ -790,6 +841,7 @@ app.get("/cursos-disponibles-con-secciones", async (req, res) => {
             JOIN SECCION SC ON SC.ID_Seccion = M.ID_Seccion
             WHERE M.ID_Estudiante = @idEstudiante
               AND CAL.Estado = 'Aprobado'
+              AND CAL.Activo = 1 -- Solo calificaciones activas
           )
           AND NOT EXISTS (
             SELECT 1
@@ -802,6 +854,7 @@ app.get("/cursos-disponibles-con-secciones", async (req, res) => {
                 JOIN SECCION SC ON SC.ID_Seccion = M.ID_Seccion
                 WHERE M.ID_Estudiante = @idEstudiante
                   AND CAL.Estado = 'Aprobado'
+                  AND CAL.Activo = 1 -- Solo calificaciones activas
                   AND SC.ID_Curso = PR.ID_Curso_Prerequisito
               )
           )
@@ -851,6 +904,104 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.put("/matriculas/:id/inactivar", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { motivo } = req.body;
+    if (!motivo) {
+      return res.status(400).json({ error: "Motivo requerido" });
+    }
+    const pool = await obtenerConexionDB();
+    await pool.request()
+      .input('ID_Matricula', id)
+      .input('Motivo', motivo)
+      .execute('InactivarMatriculaYCalificaciones');
+    res.json({ message: "Matrícula y calificaciones inactivadas correctamente" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al inactivar matrícula y calificaciones" });
+  }
+});
+
+app.put("/admisiones/:id/inactivar", async (req, res) => {
+  try {
+    let { id } = req.params;
+    let { motivo, idEstudiante } = req.body;
+    
+    if (!motivo || !idEstudiante) {
+      return res.status(400).json({ error: "Motivo e ID de estudiante requeridos" });
+    }
+
+    const pool = await obtenerConexionDB();
+    await pool.request()
+      .input('ID_Admision', id)
+      .input('ID_Estudiante', idEstudiante)
+      .input('Motivo', motivo)
+      .execute('InactivarAdmisionCascada');
+    res.json({ message: "Admisión y datos asociados inactivados correctamente" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al inactivar admisión y datos asociados" });
+  }
+});
+
+
+//para widgets en estudiantes
+// Ejemplo de endpoint en server.js
+app.get("/estudiantes-con-carrera", async (req, res) => {
+  try {
+    const pool = await obtenerConexionDB();
+    const result = await pool.request().query(`
+      SELECT 
+        E.ID_Estudiante,
+        E.Nombres,
+        E.Apellidos,
+        E.DNI,
+        E.Correo_Electronico,
+        E.Telefono,
+        E.Fecha_Nacimiento,
+        E.Activo,
+        A.ID_Carrera
+      FROM ESTUDIANTE E
+      INNER JOIN ADMISIONES A ON E.ID_Estudiante = A.ID_Estudiante
+    `);
+    res.json(result.recordset);
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener estudiantes con carrera" });
+  }
+});
+
+// Ejemplo de endpoint en server.js
+app.get("/dashboard/matriculas-por-periodo-activo", async (req, res) => {
+  try {
+    const pool = await obtenerConexionDB();
+    // Obtén el periodo académico activo
+    const periodoResult = await pool.request().query(`
+      SELECT TOP 1 ID_Periodo FROM PERIODO_ACADEMICO WHERE Activo = 1
+    `);
+    if (periodoResult.recordset.length === 0) {
+      return res.json({ activos: 0, inactivos: 0 });
+    }
+    const idPeriodo = periodoResult.recordset[0].ID_Periodo;
+
+    // Cuenta matrículas activas e inactivas en ese periodo
+    const result = await pool.request()
+      .input('idPeriodo', idPeriodo)
+      .query(`
+        SELECT 
+          SUM(CASE WHEN M.Activo = 1 THEN 1 ELSE 0 END) AS activos,
+          SUM(CASE WHEN M.Activo = 0 THEN 1 ELSE 0 END) AS inactivos
+        FROM MATRICULA M
+        INNER JOIN SECCION S ON M.ID_Seccion = S.ID_Seccion
+        WHERE S.ID_Periodo = @idPeriodo
+      `);
+
+    res.json(result.recordset[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al obtener métricas de matrículas" });
+  }
+});
 
 const PORT = 3000;
 app.listen(PORT, () => {
