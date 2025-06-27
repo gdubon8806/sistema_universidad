@@ -151,12 +151,14 @@ document.getElementById('abrir-modal').addEventListener('click', async function 
     select.innerHTML = '<option value="">Seleccione un estudiante</option>';
     const res = await fetch('http://localhost:3000/estudiantes');
     const estudiantes = await res.json();
-    estudiantes.forEach(e => {
-        const option = document.createElement('option');
-        option.value = e.ID_Estudiante;
-        option.textContent = `${e.Nombres} ${e.Apellidos} (${e.DNI})`;
-        select.appendChild(option);
-    });
+    estudiantes
+        .filter(e => e.Activo) // Solo activos
+        .forEach(e => {
+            const option = document.createElement('option');
+            option.value = e.ID_Estudiante;
+            option.textContent = `${e.Nombres} ${e.Apellidos} (${e.DNI})`;
+            select.appendChild(option);
+        });
     document.getElementById('mensaje-matricula-existe').textContent = '';
     document.getElementById('continuar-matricula').disabled = true;
 });
@@ -175,18 +177,18 @@ document.getElementById('selector-estudiante-matricula').addEventListener('chang
     const mensaje = document.getElementById('mensaje-matricula-existe');
     const btnContinuar = document.getElementById('continuar-matricula');
     mensaje.textContent = '';
-    btnContinuar.disabled = true;
-    if (idEstudiante) {
-        const res = await fetch(`http://localhost:3000/matricula-existe?idEstudiante=${idEstudiante}`);
-        const data = await res.json();
-        console.log(data);
-        if (data.existe) {
-            mensaje.textContent = 'Ya matriculó este periodo.';
-        } else {
-            mensaje.textContent = '';
-            btnContinuar.disabled = false;
-        }
-    }
+    btnContinuar.disabled = false;
+    // if (idEstudiante) {
+    //     const res = await fetch(`http://localhost:3000/matricula-existe?idEstudiante=${idEstudiante}`);
+    //     const data = await res.json();
+    //     console.log(data);
+    //     if (data.existe) {
+    //         mensaje.textContent = 'Ya matriculó este periodo.';
+    //     } else {
+    //         mensaje.textContent = '';
+    //         btnContinuar.disabled = false;
+    //     }
+    // }
 });
 
 // Al dar continuar, abrir el modal de matrícula

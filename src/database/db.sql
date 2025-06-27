@@ -173,7 +173,7 @@ CREATE TABLE PRERREQUISITO (
 
 
 -- Agregar la columna Estado (puede ser NULL al principio si ya hay datos)
-ALTER TABLE CALIFICACIONES
+ALTER TABLE CALIFICACION
 ADD Estado NVARCHAR(10);
 
 ALTER TABLE PERIODO_ACADEMICO ADD Activo BIT DEFAULT 0;
@@ -246,9 +246,6 @@ ADD Motivo_Inactivacion NVARCHAR(255);
 ALTER TABLE Usuario
 ADD Activo BIT NOT NULL DEFAULT 1,
     Motivo_Inactivacion NVARCHAR(255);
-
-
-
 
 
 

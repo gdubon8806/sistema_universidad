@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <th>Código</th>
                         <th>Nombre del curso</th>
                         <th>Créditos</th>
-                        <th>Requisitos</th>
+                        <th>Prerrequisito</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <td>${c.Codigo}</td>
                             <td>${c.Nombre}</td>
                             <td>${c.Creditos}</td>
-                            <td>${c.Requisitos || ''}</td>
+                            <td>${c.NombrePrerrequisito || ''}</td>
                         </tr>
                     `).join('')}
                 </tbody>

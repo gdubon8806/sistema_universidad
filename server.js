@@ -216,17 +216,19 @@ app.get("/cursos", async (req, res) => {
     const pool = await obtenerConexionDB();
     const result = await pool.request().query(`
       SELECT 
-        ID_Curso,
-        Codigo,
-        Nombre,
-        Creditos,
-        Requisitos
-      FROM CURSO
+        C.ID_Curso,
+        C.Codigo,
+        C.Nombre,
+        C.Creditos,
+        CP.Nombre AS NombrePrerrequisito
+      FROM CURSO C
+      LEFT JOIN PRERREQUISITO PR ON PR.ID_Curso = C.ID_Curso
+      LEFT JOIN CURSO CP ON CP.ID_Curso = PR.ID_Curso_Prerequisito
     `);
     res.json(result.recordset);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Error al obtener los cursos" });
+    res.status(500).json({ error: "Error al obtener cursos" });
   }
 });
 
@@ -834,6 +836,7 @@ app.get("/cursos-disponibles-con-secciones", async (req, res) => {
         INNER JOIN CURSOS_CARRERAS CC ON CC.ID_Curso = C.ID_Curso
         WHERE 
           CC.ID_Carrera = @idCarrera
+          -- Excluir cursos ya aprobados en cualquier periodo
           AND C.ID_Curso NOT IN (
             SELECT SC.ID_Curso
             FROM CALIFICACION CAL
@@ -841,8 +844,18 @@ app.get("/cursos-disponibles-con-secciones", async (req, res) => {
             JOIN SECCION SC ON SC.ID_Seccion = M.ID_Seccion
             WHERE M.ID_Estudiante = @idEstudiante
               AND CAL.Estado = 'Aprobado'
-              AND CAL.Activo = 1 -- Solo calificaciones activas
+              AND CAL.Activo = 1
           )
+          -- Excluir cursos con matrícula activa en el periodo actual
+          AND C.ID_Curso NOT IN (
+            SELECT S.ID_Curso
+            FROM MATRICULA M
+            INNER JOIN SECCION S ON M.ID_Seccion = S.ID_Seccion
+            WHERE M.ID_Estudiante = @idEstudiante
+              AND S.ID_Periodo = @idPeriodo
+              AND M.Activo = 1
+          )
+          -- Prerrequisitos
           AND NOT EXISTS (
             SELECT 1
             FROM PRERREQUISITO PR
@@ -854,8 +867,9 @@ app.get("/cursos-disponibles-con-secciones", async (req, res) => {
                 JOIN SECCION SC ON SC.ID_Seccion = M.ID_Seccion
                 WHERE M.ID_Estudiante = @idEstudiante
                   AND CAL.Estado = 'Aprobado'
-                  AND CAL.Activo = 1 -- Solo calificaciones activas
+                  AND CAL.Activo = 1
                   AND SC.ID_Curso = PR.ID_Curso_Prerequisito
+                  AND SC.ID_Periodo < @idPeriodo -- Solo periodos anteriores
               )
           )
       `);

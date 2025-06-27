@@ -1,4 +1,5 @@
-//para crear una admision
+--procedimientos, transacciones, deficion de usuario master
+--para crear una admision
 CREATE PROCEDURE sp_crear_admision
     @Nombres NVARCHAR(100),
     @Apellidos NVARCHAR(100),
@@ -40,6 +41,8 @@ BEGIN
         THROW;
     END CATCH
 END
+
+GO
 
 CREATE PROCEDURE InsertarUsuarioEncriptado
     @Usuario NVARCHAR(50),
@@ -93,6 +96,7 @@ EXEC InsertarUsuarioEncriptado
     @Apellido = 'Pérez',
     @Rol = 'Administrador';
 
+GO
 
 CREATE OR ALTER PROCEDURE InactivarMatriculaYCalificaciones
     @ID_Matricula INT,
@@ -124,7 +128,7 @@ BEGIN
     END CATCH
 END
 
-
+GO 
 CREATE OR ALTER PROCEDURE InactivarAdmisionCascada
     @ID_Admision INT,
     @ID_Estudiante INT,
@@ -165,4 +169,4 @@ BEGIN
         THROW;
     END CATCH
 END
-
+GO
